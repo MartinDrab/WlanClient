@@ -38,12 +38,18 @@ object Form2: TForm2
       item
         Caption = 'Frekvence'
         Width = 80
+      end
+      item
+        Caption = 'Kan'#225'l'
+        Width = 75
       end>
     ReadOnly = True
     RowSelect = True
     TabOrder = 0
     ViewStyle = vsReport
     OnDeletion = ListView1Deletion
+    ExplicitLeft = 24
+    ExplicitWidth = 434
   end
   object Panel1: TPanel
     Left = 0
@@ -52,7 +58,6 @@ object Form2: TForm2
     Height = 39
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 188
     object Button1: TButton
       Left = 0
       Top = 6
