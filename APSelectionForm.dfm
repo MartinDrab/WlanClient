@@ -4,7 +4,7 @@ object Form2: TForm2
   BorderIcons = [biSystemMenu]
   Caption = 'Vyberte vys'#237'la'#269'e'
   ClientHeight = 221
-  ClientWidth = 458
+  ClientWidth = 531
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,7 +18,7 @@ object Form2: TForm2
   object ListView1: TListView
     Left = 0
     Top = 0
-    Width = 458
+    Width = 531
     Height = 182
     Align = alClient
     Checkboxes = True
@@ -30,6 +30,10 @@ object Form2: TForm2
       item
         AutoSize = True
         Caption = 'SSID'
+      end
+      item
+        Caption = 'V'#253'kon (mW)'
+        Width = 75
       end
       item
         Caption = 'Kvalita spojen'#237
@@ -48,16 +52,16 @@ object Form2: TForm2
     TabOrder = 0
     ViewStyle = vsReport
     OnDeletion = ListView1Deletion
-    ExplicitLeft = 24
-    ExplicitWidth = 434
+    ExplicitWidth = 458
   end
   object Panel1: TPanel
     Left = 0
     Top = 182
-    Width = 458
+    Width = 531
     Height = 39
     Align = alBottom
     TabOrder = 1
+    ExplicitWidth = 458
     object Button1: TButton
       Left = 0
       Top = 6

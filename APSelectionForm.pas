@@ -78,6 +78,7 @@ If FNetwork.GetBssList(List) Then
       Data := Entry;
       Caption := TWlanBssEntry.MACToSTr(Entry.MacAddress);
       SubItems.Add(Entry.SSID);
+      SubItems.Add(Format('%d', [Entry.Rssi]));
       SubItems.Add(Format('%d %%', [Entry.LinkQuality]));
       SubItems.Add(Format('%d MHz', [Entry.Frequency Div 1000]));
       SubItems.Add(Format('%d', [Entry.Channel]))

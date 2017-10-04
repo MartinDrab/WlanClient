@@ -11,9 +11,10 @@ Type
       FSSID : WideString;
       FMacAddress : DOT11_MAC_ADDRESS;
       FBssType : TWlanNetworkBssType;
-      FLinkQuality : ULONG;
-      FFrequency : ULONG;
+      FLinkQuality : Cardinal;
+      FFrequency : Cardinal;
       FChannel : Integer;
+      FRssi : Integer;
     Public
       Class Function NewInstance(ARecord:PWLAN_BSS_ENTRY):TWlanBssEntry;
       Class Function MACToSTr(AMAC:DOT11_MAC_ADDRESS):WideSTring;
@@ -24,6 +25,7 @@ Type
       Property LinkQuality : ULONG Read FLinkQuality;
       Property Frequency : ULONG Read FFrequency;
       Property Channel : Integer Read FChannel;
+      Property Rssi : Integer Read FRssi;
     end;
 
 Implementation
@@ -46,7 +48,7 @@ If Assigned(Result) Then
   Result.FBssType := TWlanNetworkBssType(ARecord.dot11BssType);
   Result.FLinkQuality := ARecord.uLinkQuality;
   Result.FFrequency := ARecord.ulChCenterFrequency;
-  Result.FChannel := -1;
+  Result.FRssi := ARecord.lRssi;
   Case ARecord.ulChCenterFrequency Of
     2412000 : Result.FChannel := 1;
     2417000 : Result.FChannel := 2;
@@ -61,6 +63,7 @@ If Assigned(Result) Then
     2462000 : Result.FChannel := 11;
     2467000 : Result.FChannel := 12;
     2472000 : Result.FChannel := 13;
+    Else Result.FChannel := -1;
     end;
   end;
 end;
