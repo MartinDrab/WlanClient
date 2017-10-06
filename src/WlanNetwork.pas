@@ -4,7 +4,7 @@ Interface
 
 Uses
   WlanAPI, WlanAPIClient, WlanBssEntry,
-  Classes, Windows, Generics.Collections;
+  Windows, Generics.Collections;
 
 Type
   TWlanNetworkAuthAlgorithm = (
@@ -35,7 +35,8 @@ Type
       Class Function AuthAlgoToStr(AAlgo:TWlanNetworkAuthAlgorithm):WideString;
       Class Function CipherAlgoToSTr(AAlgo:Cardinal):WideString;
       Class Function BSSTypeToSTr(AType:TWlanNetworkBSSType):WideString;
-      Function Connect(AEntries:TList = Nil):Boolean;
+
+      Function Connect(AEntries:TObjectList<TWlanBssEntry>):Boolean;
       Function Disconnect:Boolean;
       Function GetBssList(AList:TObjectList<TWlanBssEntry>):Boolean;
 
@@ -131,7 +132,7 @@ Case AType Of
   end;
 end;
 
-Function TWlanNetwork.Connect(AEntries:TList = Nil):Boolean;
+Function TWlanNetwork.Connect(AEntries:TObjectList<TWlanBssEntry>):Boolean;
 Var
   I : Integer;
   Params : WLAN_CONNECTION_PARAMETERS;
@@ -142,8 +143,6 @@ If FSecurityEnabled Then
   Params.wlanConnectionMode := wlan_connection_mode_discovery_secure
 Else Params.wlanConnectionMode := wlan_connection_mode_discovery_unsecure;
 Params.strProfile := Nil;
-// If FHasProfile Then
-//  Params.strProfile := PWideChar(FProfileName);
 Result := True;
 MacList := Nil;
 If (Assigned(AEntries)) And (AEntries.Count > 0) Then

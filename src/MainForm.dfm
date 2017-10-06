@@ -45,11 +45,15 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = TabSheet1
+    ActivePage = ProfileSheet
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Bezdr'#225'tov'#233' s'#237't'#283
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -98,7 +102,7 @@ object Form1: TForm1
         Height = 35
         Align = alTop
         TabOrder = 1
-        object Button1: TButton
+        object NetworkConnectButton: TButton
           Left = 8
           Top = 8
           Width = 89
@@ -106,11 +110,11 @@ object Form1: TForm1
           Caption = 'P'#345'ipojit'
           Enabled = False
           TabOrder = 0
-          OnClick = Button1Click
+          OnClick = NetworkConnectButtonClick
         end
         object Button2: TButton
           Left = 103
-          Top = 8
+          Top = 4
           Width = 89
           Height = 25
           Caption = 'Odpojit'
@@ -124,6 +128,10 @@ object Form1: TForm1
       Caption = 'S'#237#357'ov'#233' profily'
       ImageIndex = 1
       OnShow = ProfileSheetShow
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -131,6 +139,16 @@ object Form1: TForm1
         Height = 33
         Align = alTop
         TabOrder = 0
+        object ProfileConnectButton: TButton
+          Left = 8
+          Top = 8
+          Width = 89
+          Height = 25
+          Caption = 'P'#345'ipojit'
+          Enabled = False
+          TabOrder = 0
+          OnClick = NetworkConnectButtonClick
+        end
       end
       object ProfileListView: TListView
         Left = 0

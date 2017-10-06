@@ -17,12 +17,13 @@ Type
     ListView1: TListView;
     CardListTimer: TTimer;
     Panel2: TPanel;
-    Button1: TButton;
+    NetworkConnectButton: TButton;
     Button2: TButton;
     Label1: TLabel;
     ProfileSheet: TTabSheet;
     ProfileMenuPanel: TPanel;
     ProfileListView: TListView;
+    ProfileConnectButton: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -30,7 +31,7 @@ Type
     procedure RefreshNetworkCards(Sender: TObject);
     Procedure RefreshAll(Sender:TObject);
     procedure Button2Click(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
+    procedure NetworkConnectButtonClick(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure ProfileListViewData(Sender: TObject; Item: TListItem);
@@ -207,27 +208,41 @@ If ComboBox1.ItemIndex > -1 Then
 Else ListView1.Clear;
 end;
 
-Procedure TForm1.Button1Click(Sender: TObject);
+Procedure TForm1.NetworkConnectButtonClick(Sender: TObject);
 Var
   I : Integer;
   L : TListItem;
+  P : TWlanProfile;
   N : TWlanNetwork;
 begin
 CardListTimer.Enabled := False;
-L := ListView1.Selected;
-If Assigned(L) Then
+If Sender = NetworkConnectButton Then
   begin
-  ListView1.Selected := Nil;
-  N := TWlanNetwork(L.Data);
-  With TForm2.Create(Application, N) Do
+  L := ListView1.Selected;
+  If Assigned(L) Then
+    begin
+    ListView1.Selected := Nil;
+    N := TWlanNetwork(L.Data);
+    end;
+  end
+Else If Sender = ProfileConnectButton Then
+  begin
+  L := ProfileListView.Selected;
+  If Assigned(L) Then
+    begin
+    ProfileListView.Selected := Nil;
+    P := FProfileList[L.Index];
+    end;
+  end;
+
+If (Assigned(N) Or Assigned(P)) Then
+  begin
+  With TForm2.Create(Application, N, P) Do
     begin
     ShowModal;
     If Not Cancelled Then
       begin
       N.Connect(MacList);
-      For I := 0 To MacList.Count - 1 Do
-        TWlanBssEntry(MacList[I]).Free;
-
       MacList.Clear;
       MacList.Free;
       end;
@@ -315,7 +330,7 @@ Var
   Net : TWlanNetwork;
 begin
 Net := Item.Data;
-Button1.Enabled := (Selected) And (Not Net.Connected);
+NetworkConnectButton.Enabled := (Selected) And (Not Net.Connected);
 Button2.Enabled := (Selected) And (Net.Connected);
 end;
 
