@@ -6,7 +6,7 @@ Uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, WLanAPI,
   WlanAPIClient, WlanInterface, wlanNetwork, Vcl.ComCtrls,
-  WlanBssEntry, Vcl.OleCtrls, SHDocVw;
+  WlanBssEntry, Vcl.OleCtrls, SHDocVw, Generics.Collections;
 
 Type
   TForm1 = Class (TForm)
@@ -76,7 +76,7 @@ If FWlanClient.EnumInterfaces(CardList) Then
   If ComboBox1.ItemIndex > -1 Then
     begin
     Card := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
-    ItemGuid := Card.Guid^;
+    ItemGuid := Card.Guid;
     LastState := Card.State;
     end;
 
@@ -88,7 +88,7 @@ If FWlanClient.EnumInterfaces(CardList) Then
       ComboBox1.Items.Strings[I] := Format('%s (%s)', [Card.Description, TWlanInterface.StateToStr(Card.State)]);
       ComboBox1.Items.Objects[I].Free;
       ComboBox1.Items.Objects[I] := Card;
-      If ItemGuid = Card.Guid^ Then
+      If ItemGuid = Card.Guid Then
         begin
         SelectedSurvived := True;
         ComboBox1.ItemIndex := I;
@@ -115,7 +115,7 @@ end;
 Procedure TForm1.RefreshNetworks(Sender: TObject);
 Var
   I : Integer;
-  NetworkList : TList;
+  NetworkList : TObjectList<TWlanNetwork>;
   WlanInterface : TWlanInterface;
   WlanNetwork : TWlanNetwork;
   L : TListItem;
@@ -123,7 +123,7 @@ begin
 If ComboBox1.ItemIndex > -1 Then
   begin
   WlanInterface := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
-  NetworkList := TList.Create;
+  NetworkList := TObjectList<TWlanNetwork>.Create(False);
   If WlanInterface.EnumNetworks(NetworkList) Then
     begin
     ListView1.Items.BeginUpdate;
@@ -169,7 +169,6 @@ If ComboBox1.ItemIndex > -1 Then
     ListView1.Items.EndUpdate;
     end
   Else ListView1.Clear;
-
 
   NetworkList.Free;
   end

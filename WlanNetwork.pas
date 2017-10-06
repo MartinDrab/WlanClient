@@ -3,7 +3,7 @@ Unit WlanNetwork;
 Interface
 
 Uses
-  WlanAPI, WlanAPIClient, WlanInterface, WlanBssEntry,
+  WlanAPI, WlanAPIClient, WlanBssEntry,
   Classes, Windows, Generics.Collections;
 
 Type
@@ -14,7 +14,7 @@ Type
 
   TWlanNetwork = Class
     Private
-      FInterface : TWlanInterface;
+      FInterfaceGuid : TGuid;
       FClient : TWlanAPIClient;
 
       FProfileName : WideString;
@@ -31,7 +31,7 @@ Type
       FConnected : Boolean;
       FHasProfile : Boolean;
     Public
-      Class Function NewInstance(AClient:TWlanAPIClient; AInterface:TWlanInterface; ARecord:PWLAN_AVAILABLE_NETWORK_LIST):TWlanNetwork;
+      Class Function NewInstance(AClient:TWlanAPIClient; AInterface:TGuid; ARecord:PWLAN_AVAILABLE_NETWORK_LIST):TWlanNetwork;
       Class Function AuthAlgoToStr(AAlgo:TWlanNetworkAuthAlgorithm):WideString;
       Class Function CipherAlgoToSTr(AAlgo:Cardinal):WideString;
       Class Function BSSTypeToSTr(AType:TWlanNetworkBSSType):WideString;
@@ -55,8 +55,11 @@ Type
 
 Implementation
 
+Uses
+  WlanInterface;
 
-Class Function TWlanNetwork.NewInstance(AClient:TWlanAPIClient; AInterface:TWlanInterface; ARecord:PWLAN_AVAILABLE_NETWORK_LIST):TWlanNetwork;
+
+Class Function TWlanNetwork.NewInstance(AClient:TWlanAPIClient; AInterface:TGuid; ARecord:PWLAN_AVAILABLE_NETWORK_LIST):TWlanNetwork;
 Var
   Rec : PWLAN_AVAILABLE_NETWORK;
 begin
@@ -69,7 +72,7 @@ Except
 If Assigned(Result) Then
   begin
   Result.FClient := AClient;
-  Result.FInterface := AInterface;
+  Result.FInterfaceGuid := AInterface;
   Rec := @ARecord.Network[ARecord.dwIndex];
   Result.FProfileName := Copy(WideString(Rec.strProfileName), 1, Length(WideString(Rec.strProfileName)));
   Result.FSSID := Copy(AnsiString(PAnsiChar(@Rec.dot11Ssid.ucSSID)), 1, Rec.dot11Ssid.uSSIDLength);
@@ -171,7 +174,7 @@ If Result Then
   For I := 0 To Params.pDot11Ssid.uSSIDLength - 1 Do
     Params.pDot11Ssid.ucSSID[I] := Ord(FSSID[I + 1]);
 
-  Result := FInterface.Connect(@Params);
+  Result := FClient._WlanConnect(@FInterfaceGuid, @Params);
   If Assigned(MacList) Then
     WlanFreeMemory(MacList);
   end;
@@ -179,7 +182,7 @@ end;
 
 Function TWlanNetwork.Disconnect:Boolean;
 begin
-Result := FInterface.Disconnect;
+Result := FClient._WlanDisconnect(@FInterfaceGuid);
 end;
 
 Function TWlanNetwork.GetBssList(AList:TObjectList<TWlanBssEntry>):Boolean;
@@ -194,7 +197,7 @@ pSSID.uSSIDLength := Length(FSSID);
 For I := 0 To pSSID.uSSIDLength - 1 Do
   pSSID.ucSSID[I] := Ord(FSSID[I + 1]);
 
-Result := FInterface.GetNetworkBssList(Nil, Ord(FBssType), FSecurityEnabled, List);
+Result := FClient._WlanGetNetworkBssList(@FInterfaceGuid, Nil, Ord(FBssType), FSecurityEnabled, List);
 If Result Then
   begin
   For I := 0 To List.dwNumberOfItems - 1 Do
