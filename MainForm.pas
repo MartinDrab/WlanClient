@@ -5,7 +5,7 @@ Interface
 Uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, WLanAPI,
-  WlanAPIClient, WlanInterface, wlanNetwork, Vcl.ComCtrls,
+  WlanAPIClient, WlanBus, WlanInterface, wlanNetwork, Vcl.ComCtrls,
   WlanBssEntry, Vcl.OleCtrls, SHDocVw, Generics.Collections;
 
 Type
@@ -32,6 +32,7 @@ Type
       Selected: Boolean);
   Private
     FWlanClient : TWlanAPICLient;
+    FWlanBus : TWlanBus;
     Function BooleanToStr(X:Boolean):WideSTring;
   end;
 
@@ -61,7 +62,7 @@ end;
 
 Procedure TForm1.RefreshNetworkCards(Sender: TObject);
 Var
- CardList : TList;
+ CardList : TObjectList<TWlanInterface>;
  Card : TWlanInterface;
  Ret : Boolean;
  I : Integer;
@@ -69,8 +70,8 @@ Var
  LastState : TWlanInterfaceState;
  SelectedSurvived : Boolean;
 begin
-CardList := TList.Create;
-If FWlanClient.EnumInterfaces(CardList) Then
+CardList := TObjectList<TWlanInterface>.Create(False);
+If FWlanBus.EnumInterfaces(CardList) Then
   begin
   SelectedSurvived := False;
   If ComboBox1.ItemIndex > -1 Then
@@ -234,15 +235,16 @@ end;
 Procedure TForm1.FormCreate(Sender: TObject);
 Var
   I : Integer;
-  CardList : TList;
+  CardList : TObjectList<TWlanInterface>;
   Tmp : TWlanInterface;
 begin
 FWlanClient := TWlanAPIClient.NewInstance;
 If Not Assigned(FWlanClient) THen
   Raise Exception.Create('Nepodaøilo se pøipojit ke službì Automatická konfigurace bezdrátových sítí');
 
-CardList := TList.Create;
-If Not FWlanClient.EnumInterfaces(CardList) Then
+FWlanBus := TWlanBus.Create(FWlanClient);
+CardList := TObjectList<TWlanInterface>.Create(False);
+If Not FWlanBus.EnumInterfaces(CardList) Then
   begin
   CardList.Free;
   FreeAndNil(FWlanClient);

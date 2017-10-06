@@ -9,7 +9,8 @@ uses
   WlanInterface in 'WlanInterface.pas',
   WlanNetwork in 'WlanNetwork.pas',
   WlanBssEntry in 'WlanBssEntry.pas',
-  APSelectionForm in 'APSelectionForm.pas' {Form2};
+  APSelectionForm in 'APSelectionForm.pas' {Form2},
+  WlanBus in 'WlanBus.pas';
 
 {$R *.RES}
 
@@ -24,7 +25,7 @@ If GetVersionExW(VersionInfo) Then
     Application.Initialize;
     Application.MainFormOnTaskbar := True;
     Application.CreateForm(TForm1, Form1);
-    Application.Run;
+  Application.Run;
     end
   Else MessageBox(0, 'Program nepodporuje vaši verzi operaèního systému', 'Chyba', MB_OK Or MB_ICONERROR);
   end

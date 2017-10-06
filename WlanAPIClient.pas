@@ -23,8 +23,6 @@ Type
       Function _WlanGetProfileList(pInterfaceGuid:PGuid; Var AList:PWLAN_PROFILE_INFO_LIST):Boolean;
       Function _WlanGetProfile(pInterfaceGuid:PGuid; ProfileName:PWideChar; DecryptPassword:Boolean; Var ProfileXML:PWideChar):Boolean;
 
-      Function EnumInterfaces(AList:TList):Boolean;
-
       Property Error : LONG Read FError;
       Property APIVersion : DWORD Read FAPIVersion;
     end;
@@ -33,7 +31,7 @@ Type
 Implementation
 
 Uses
-  WlanInterface;
+  SysUtils, WlanInterface;
 
 Constructor TWlanAPIClient.Create;
 begin
@@ -62,10 +60,7 @@ If Assigned(Result) Then
   begin
   Result.FError := WlanOpenHandle(WLANAPI_CLIENT_VISTA, Nil, Result.FAPIVersion, Result.FHandle);
   If Result.FError <> ERROR_SUCCESS Then
-    begin
-    Result.Free;
-    Result := Nil
-    end;
+    FreeAndNil(Result);
   end;
 end;
 
@@ -96,38 +91,6 @@ Function TWlanAPIClient._WlanGetAvailableNetworkList(InterfaceGuid:PGUID; Flags:
 begin
 FError := WlanAPI.WlanGetAvailableNetworkList(FHandle, InterfaceGuid, Flags, Nil, List);
 Result := FError = ERROR_SUCCESS;
-end;
-
-Function TWlanAPICLient.EnumInterfaces(AList:TList):Boolean;
-Var
-  I, J : Integer;
-  List : PWLAN_INTERFACE_INFO_LIST;
-  Tmp : TWlanInterface;
-begin
-Result := _WlanEnumInterfaces(List);
-If Result Then
-  begin
-  For I := 0 To List.dwNumberOfItems - 1 Do
-    begin
-    List.dwIndex := I;
-    Tmp := TWlanInterface.NewInstance(Self, List);
-    Result := Assigned(Tmp);
-    If Result Then
-      begin
-      AList.Add(Tmp);
-      end
-    Else begin
-      For J := I - 1 DownTo 0 Do
-        TWlanInterface(AList[J]).Free;
-
-      AList.Clear;
-      FError := ERROR_NOT_ENOUGH_MEMORY;
-      Break;
-      end;
-    end;
-
-  WlanFreeMemory(List);
-  end;
 end;
 
 Function TWlanAPIClient._WlanConnect(pInterfaceGuid:PGUID; pConnectionParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
