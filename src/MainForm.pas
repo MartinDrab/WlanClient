@@ -321,12 +321,24 @@ end;
 
 Procedure TForm1.ProfileListViewData(Sender: TObject; Item: TListItem);
 Var
+  typeStr : WideString;
   profile : TWlanProfile;
 begin
 With Item Do
   begin
   profile := FProfileList[Index];
   Caption := profile.Name;
+  typeStr := '';
+  If profile.User Then
+    typeStr := ' User';
+
+  If profile.GroupPolicy Then
+    typeStr := typeStr + ' GP';
+
+  If typeStr = '' Then
+    typeStr := 'Global';
+
+  SubItems.Add(typeStr);
   SubItems.Add(profile.Password);
   end;
 end;

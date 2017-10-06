@@ -144,6 +144,10 @@ object Form1: TForm1
             Caption = 'Name'
           end
           item
+            Caption = 'Type'
+            Width = 75
+          end
+          item
             AutoSize = True
             Caption = 'Password'
           end>
@@ -155,8 +159,8 @@ object Form1: TForm1
         TabOrder = 1
         ViewStyle = vsReport
         OnData = ProfileListViewData
-        ExplicitLeft = 24
-        ExplicitWidth = 480
+        ExplicitLeft = 32
+        ExplicitWidth = 472
       end
     end
   end
