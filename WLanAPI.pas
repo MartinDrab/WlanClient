@@ -215,6 +215,9 @@ Function WlanConnect(hCLientHandle:THandle; pInterfaceGuid:PGUID; pConnectionPar
 Function WlanDisconnect(hCLientHandle:THandle; pInterfaceGuid:PGUID; pReserved:PVOID):DWORD; StdCall;
 Function WlanAllocateMemory(dwMemorySize:DWORD):PVOID; StdCall;
 
+Function WlanGetProfileList(hClientHandle:THandle; NetworkInterface:PGuid; Reserved:Pointer; Var ProfileList:PWLAN_PROFILE_INFO_LIST):Cardinal; StdCall;
+Function WlanGetProfile(hClientHandle:THandle; NetworkInterface:PGuid; ProfileName:PWideChar; Reserved:Pointer; Var ProfileXML:PWideChar; Var Flags:Cardinal; Var GrantedAccess:Cardinal):Cardinal; StdCall;
+
 Implementation
 
 Const
@@ -229,5 +232,9 @@ Function WlanGetNetworkBssList(hClientHandle:THandle; pInterfaceGuid:PGUID; pDot
 Function WlanConnect(hCLientHandle:THandle; pInterfaceGuid:PGUID; pConnectionParameters:PWLAN_CONNECTION_PARAMETERS; pReserved:PVOID):DWORD; StdCall; External WLANAPI_LIBRARY;
 Function WlanDisconnect(hCLientHandle:THandle; pInterfaceGuid:PGUID; pReserved:PVOID):DWORD; StdCall; External WLANAPI_LIBRARY;
 Function WlanAllocateMemory(dwMemorySize:DWORD):PVOID; StdCall; External WLANAPI_LIBRARY;
+Function WlanGetProfileList(hClientHandle:THandle; NetworkInterface:PGuid; Reserved:Pointer; Var ProfileList:PWLAN_PROFILE_INFO_LIST):Cardinal; StdCall; External WLANAPI_LIBRARY;
+Function WlanGetProfile(hClientHandle:THandle; NetworkInterface:PGuid; ProfileName:PWideChar; Reserved:Pointer; Var ProfileXML:PWideChar; Var Flags:Cardinal; Var GrantedAccess:Cardinal):Cardinal; StdCall; External WLANAPI_LIBRARY;
+
 
 End.
+
