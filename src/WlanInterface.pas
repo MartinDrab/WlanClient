@@ -3,7 +3,7 @@ Unit WlanInterface;
 Interface
 
 Uses
-  Windows, Classes, WlanAPI, WlanAPIClient, WlanNetwork,
+  Windows, Classes, WlanAPI, WlanAPIClient, WlanNetwork, wlanProfile,
   Generics.Collections;
 
 Type
@@ -21,8 +21,9 @@ Type
     Public
       Class Function NewInstance(AClient:TWlanAPIClient; ARecord:PWLAN_INTERFACE_INFO_LIST):TWlanInterface;
       Class Function StateToStr(AState:TWlanInterfaceState):WideString;
-      Function EnumNetworks(AList:TObjectList<TWlanNetwork>):Boolean;
 
+      Function EnumNetworks(AList:TObjectList<TWlanNetwork>):Boolean;
+      Function EnumProfiles(AList:TObjectList<TWlanProfile>):Boolean;
       Function Connect(AParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
       Function Disconnect:Boolean;
 
@@ -99,6 +100,36 @@ If Result Then
   WlanFreeMemory(Networks);
   end;
 end;
+
+
+Function TWlanInterface.EnumProfiles(AList:TObjectList<TWlanProfile>):Boolean;
+Var
+  I : Integer;
+  tmp : TWlanProfile;
+  profile : PWLAN_PROFILE_INFO;
+  profileArray : PWLAN_PROFILE_INFO_LIST;
+begin
+If FClient._WlanGetProfileList(@FGuid, profileArray) Then
+  begin
+  profile := @profileArray.List;
+  For I := 0 To profileArray.NumberOfItems Do
+    begin
+    profileArray.Index := I;
+    tmp := TWlanProfile.NewInstance(FClient, FGuid, profile^);
+    If Assigned(tmp) Then
+      AList.Add(tmp)
+    Else begin
+      AList.Clear;
+      Break;
+      end;
+
+    Inc(profile);
+    end;
+
+  WlanFreeMemory(profileArray);
+  end;
+end;
+
 
 Function TWlanInterface.Connect(AParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
 begin

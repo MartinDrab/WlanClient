@@ -14,7 +14,7 @@ Type
       FXML : WideString;
       FFlags : Cardinal;
     Public
-      Class Function NewInstance(AClient:TWlanAPIClient; AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
+      Class Function NewInstance(AClient:TWlanAPIClient; Var AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
 
       Property Name : WideString Read FName;
       Property XML : WideString Read FXML;
@@ -28,7 +28,7 @@ Uses
   Sysutils;
 
 
-Class Function TWlanProfile.NewInstance(AClient:TWlanAPIClient; AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
+Class Function TWlanProfile.NewInstance(AClient:TWlanAPIClient; Var AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
 Var
   pxml : PWideChar;
 begin
