@@ -112,7 +112,7 @@ begin
 If FClient._WlanGetProfileList(@FGuid, profileArray) Then
   begin
   profile := @profileArray.List;
-  For I := 0 To profileArray.NumberOfItems Do
+  For I := 0 To profileArray.NumberOfItems - 1 Do
     begin
     profileArray.Index := I;
     tmp := TWlanProfile.NewInstance(FClient, FGuid, profile^);

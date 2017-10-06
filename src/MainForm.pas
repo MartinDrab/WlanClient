@@ -6,7 +6,7 @@ Uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, WLanAPI,
   WlanAPIClient, WlanBus, WlanInterface, wlanNetwork, Vcl.ComCtrls,
-  WlanBssEntry, Vcl.OleCtrls, SHDocVw, Generics.Collections;
+  WlanBssEntry, WlanProfile, Vcl.OleCtrls, SHDocVw, Generics.Collections;
 
 Type
   TForm1 = Class (TForm)
@@ -20,6 +20,9 @@ Type
     Button1: TButton;
     Button2: TButton;
     Label1: TLabel;
+    ProfileSheet: TTabSheet;
+    ProfileMenuPanel: TPanel;
+    ProfileListView: TListView;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -30,10 +33,14 @@ Type
     procedure Button1Click(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure ProfileListViewData(Sender: TObject; Item: TListItem);
+    procedure ProfileSheetShow(Sender: TObject);
   Private
     FWlanClient : TWlanAPICLient;
     FWlanBus : TWlanBus;
+    FProfileList : TObjectList<TWlanProfile>;
     Function BooleanToStr(X:Boolean):WideSTring;
+    Procedure RefreshProfiles(AComboBox:TComboBox);
   end;
 
 Var
@@ -111,6 +118,30 @@ If FWlanBus.EnumInterfaces(CardList) Then
   end;
 
 CardList.Free;
+end;
+
+Procedure TForm1.RefreshProfiles(AComboBox:TComboBox);
+Var
+  tmpList2 : TObjectList<TWlanProfile>;
+  tmpList : TObjectList<TWlanProfile>;
+  wlanInterface : TWlanInterface;
+begin
+If ComboBox1.ItemIndex > -1 Then
+  begin
+  WlanInterface := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
+  tmpList := TObjectList<TWlanProfile>.Create;
+  If wlanInterface.EnumProfiles(tmpList) Then
+    begin
+    ProfileListView.Items.Count := 0;
+    tmpList2 := FProfileList;
+    FProfileList := tmpList;
+    tmpList := tmpList2;
+    ProfileListView.Items.Count := FProfileList.Count;
+    end;
+
+  If Assigned(tmpList) Then
+    tmpList.Free;
+  end;
 end;
 
 Procedure TForm1.RefreshNetworks(Sender: TObject);
@@ -228,6 +259,9 @@ end;
 Procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 CardListTimer.Enabled := False;
+If Assigned(FProfileList) Then
+  FreeAndNil(FProfileList);
+
 If Assigned(FWlanBus) Then
   FreeAndNil(FWlanBus);
 
@@ -283,6 +317,23 @@ begin
 Net := Item.Data;
 Button1.Enabled := (Selected) And (Not Net.Connected);
 Button2.Enabled := (Selected) And (Net.Connected);
+end;
+
+Procedure TForm1.ProfileListViewData(Sender: TObject; Item: TListItem);
+Var
+  profile : TWlanProfile;
+begin
+With Item Do
+  begin
+  profile := FProfileList[Index];
+  Caption := profile.Name;
+  SubItems.Add('<encrypted>');
+  end;
+end;
+
+Procedure TForm1.ProfileSheetShow(Sender: TObject);
+begin
+RefreshProfiles(ComboBox1);
 end;
 
 End.

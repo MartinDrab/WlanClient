@@ -50,10 +50,6 @@ object Form1: TForm1
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Bezdr'#225'tov'#233' s'#237't'#283
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -122,6 +118,45 @@ object Form1: TForm1
           TabOrder = 1
           OnClick = Button2Click
         end
+      end
+    end
+    object ProfileSheet: TTabSheet
+      Caption = 'S'#237#357'ov'#233' profily'
+      ImageIndex = 1
+      OnShow = ProfileSheetShow
+      object ProfileMenuPanel: TPanel
+        Left = 0
+        Top = 0
+        Width = 504
+        Height = 33
+        Align = alTop
+        TabOrder = 0
+      end
+      object ProfileListView: TListView
+        Left = 0
+        Top = 33
+        Width = 504
+        Height = 235
+        Align = alClient
+        Columns = <
+          item
+            AutoSize = True
+            Caption = 'Name'
+          end
+          item
+            AutoSize = True
+            Caption = 'Password'
+          end>
+        DoubleBuffered = True
+        OwnerData = True
+        ReadOnly = True
+        RowSelect = True
+        ParentDoubleBuffered = False
+        TabOrder = 1
+        ViewStyle = vsReport
+        OnData = ProfileListViewData
+        ExplicitLeft = 24
+        ExplicitWidth = 480
       end
     end
   end
