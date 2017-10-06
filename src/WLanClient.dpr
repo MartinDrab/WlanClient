@@ -10,7 +10,8 @@ uses
   WlanNetwork in 'WlanNetwork.pas',
   WlanBssEntry in 'WlanBssEntry.pas',
   APSelectionForm in 'APSelectionForm.pas' {Form2},
-  WlanBus in 'WlanBus.pas';
+  WlanBus in 'WlanBus.pas',
+  WlanProfile in 'WlanProfile.pas';
 
 {$R *.RES}
 

@@ -112,6 +112,7 @@
 				<Form>Form2</Form>
 			</DCCReference>
 			<DCCReference Include="WlanBus.pas"/>
+			<DCCReference Include="WlanProfile.pas"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
