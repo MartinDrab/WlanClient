@@ -228,6 +228,9 @@ end;
 Procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 CardListTimer.Enabled := False;
+If Assigned(FWlanBus) Then
+  FreeAndNil(FWlanBus);
+
 If Assigned(FWlanClient) Then
   FreeAndNil(FWlanClient);
 end;
