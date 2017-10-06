@@ -21,6 +21,8 @@ Type
     Public
       Class Function NewInstance(AClient:TWlanAPIClient; Var AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
 
+      Function Delete:Boolean;
+
       Property Name : WideString Read FName;
       Property XML : WideString Read FXML;
       Property Flags : Cardinal Read FFlags;
@@ -89,4 +91,11 @@ If Assigned(Result) Then
 end;
 
 
+Function TWlanProfile.Delete:Boolean;
+begin
+Result := FClient._WlanDeleteProfile(@FInterfaceGuid, PWideChar(FName));
+end;
+
+
 End.
+
