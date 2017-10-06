@@ -36,6 +36,8 @@ Type
       Selected: Boolean);
     procedure ProfileListViewData(Sender: TObject; Item: TListItem);
     procedure ProfileSheetShow(Sender: TObject);
+    procedure ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
   Private
     FWlanClient : TWlanAPICLient;
     FWlanBus : TWlanBus;
@@ -242,7 +244,7 @@ If (Assigned(N) Or Assigned(P)) Then
     ShowModal;
     If Not Cancelled Then
       begin
-      N.Connect(MacList);
+      N.Connect(MacList, HiddenNetwork, CreateProfile, AutoConnect);
       MacList.Clear;
       MacList.Free;
       end;
@@ -356,6 +358,12 @@ With Item Do
   SubItems.Add(typeStr);
   SubItems.Add(profile.Password);
   end;
+end;
+
+Procedure TForm1.ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+begin
+ProfileConnectButton.Enabled := Assigned(Item);
 end;
 
 Procedure TForm1.ProfileSheetShow(Sender: TObject);

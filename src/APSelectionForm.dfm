@@ -19,7 +19,7 @@ object Form2: TForm2
     Left = 0
     Top = 0
     Width = 531
-    Height = 182
+    Height = 160
     Align = alClient
     Checkboxes = True
     Columns = <
@@ -52,22 +52,50 @@ object Form2: TForm2
     TabOrder = 0
     ViewStyle = vsReport
     OnDeletion = ListView1Deletion
+    ExplicitHeight = 182
   end
   object Panel1: TPanel
     Left = 0
-    Top = 182
+    Top = 160
     Width = 531
-    Height = 39
+    Height = 61
     Align = alBottom
     TabOrder = 1
     object Button1: TButton
       Left = 0
-      Top = 6
+      Top = 30
       Width = 65
       Height = 25
       Caption = 'P'#345'ipojit'
       TabOrder = 0
       OnClick = Button1Click
+    end
+    object CreateProfileCheckBox: TCheckBox
+      Left = 0
+      Top = 6
+      Width = 89
+      Height = 17
+      Caption = 'Vytvo'#345'it profil'
+      Enabled = False
+      TabOrder = 1
+    end
+    object AutoConnectCheckBox: TCheckBox
+      Left = 95
+      Top = 6
+      Width = 130
+      Height = 17
+      Caption = 'P'#345'ipojovat automaticky'
+      Enabled = False
+      TabOrder = 2
+    end
+    object HiddenNetworkCheckBox: TCheckBox
+      Left = 224
+      Top = 6
+      Width = 97
+      Height = 17
+      Caption = 'Skryt'#225' s'#237#357
+      Enabled = False
+      TabOrder = 3
     end
   end
 end

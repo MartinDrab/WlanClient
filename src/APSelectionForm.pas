@@ -13,6 +13,9 @@ type
     ListView1: TListView;
     Panel1: TPanel;
     Button1: TButton;
+    CreateProfileCheckBox: TCheckBox;
+    AutoConnectCheckBox: TCheckBox;
+    HiddenNetworkCheckBox: TCheckBox;
     Procedure FormCreate(Sender: TObject);
     Procedure Button1Click(Sender: TObject);
     Procedure ListView1Deletion(Sender: TObject; Item: TListItem);
@@ -21,11 +24,17 @@ type
     FNetwork : TWlanNetwork;
     FProfile : TWlanProfile;
     FMACList : TObjectList<TWlanBssEntry>;
+    FCreateProfile : Boolean;
+    FAutoConnect : Boolean;
+    FHiddenNetwork : Boolean;
   Public
     Constructor Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile); Reintroduce;
 
     Property MacList : TObjectList<TWlanBssEntry> Read FMacList;
     Property Cancelled : Boolean Read FCancelled;
+    Property CreateProfile : Boolean Read FCreateProfile;
+    Property AutoConnect : Boolean Read FAutoConnect;
+    Property HiddenNetwork : Boolean Read FHiddenNetwork;
   end;
 
 
@@ -52,6 +61,9 @@ For I := 0 To ListView1.Items.Count - 1 Do
     end;
   end;
 
+FCreateProfile := CreateProfileCheckBox.Checked;
+FAutoConnect := AutoConnectCheckBox.Checked;
+FHiddenNetwork := HiddenNetworkCheckBox.Checked;
 Close;
 end;
 
@@ -72,6 +84,9 @@ Var
 begin
 If Assigned(FNetwork) Then
   begin
+  CreateProfileCheckBox.Enabled := True;
+  AutoConnectCheckBox.Enabled := True;
+  HiddenNetworkCheckBox.Enabled := True;
   List := TObjectList<TWlanBssEntry>.Create(False);
   If FNetwork.GetBssList(List) Then
     begin
@@ -92,6 +107,9 @@ If Assigned(FNetwork) Then
     end;
 
   List.Free;
+  end
+Else begin
+
   end;
 end;
 

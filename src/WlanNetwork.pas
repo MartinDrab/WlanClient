@@ -36,7 +36,7 @@ Type
       Class Function CipherAlgoToSTr(AAlgo:Cardinal):WideString;
       Class Function BSSTypeToSTr(AType:TWlanNetworkBSSType):WideString;
 
-      Function Connect(AEntries:TObjectList<TWlanBssEntry>):Boolean;
+      Function Connect(AEntries:TObjectList<TWlanBssEntry>; AHiddenNetwork:Boolean; ACreateProfile:Boolean; AAutoConnect:Boolean):Boolean;
       Function Disconnect:Boolean;
       Function GetBssList(AList:TObjectList<TWlanBssEntry>):Boolean;
 
@@ -132,7 +132,7 @@ Case AType Of
   end;
 end;
 
-Function TWlanNetwork.Connect(AEntries:TObjectList<TWlanBssEntry>):Boolean;
+Function TWlanNetwork.Connect(AEntries:TObjectList<TWlanBssEntry>; AHiddenNetwork:Boolean; ACreateProfile:Boolean; AAutoConnect:Boolean):Boolean;
 Var
   I : Integer;
   Params : WLAN_CONNECTION_PARAMETERS;
@@ -167,11 +167,21 @@ Else Params.pDesiredBssidList := Nil;
 If Result Then
   begin
   Params.dot11BssType := Cardinal(FBssType);
-  Params.dwFlags := 0;
   Params.pDot11Ssid := @S;
   Params.pDot11Ssid.uSSIDLength := Length(FSSID);
   For I := 0 To Params.pDot11Ssid.uSSIDLength - 1 Do
     Params.pDot11Ssid.ucSSID[I] := Ord(FSSID[I + 1]);
+
+  Params.dwFlags := 0;
+  If AHiddenNetwork Then
+    Params.dwFlags := (Params.dwFlags Or WLAN_CONNECTION_HIDDEN_NETWORK);
+
+  If ACreateProfile Then
+    Params.dwFlags := (Params.dwFlags Or WLAN_CONNECTION_PERSIST_DISCOVERY_PROFILE);
+
+  If AAutoConnect Then
+    Params.dwFlags := (Params.dwFlags Or WLAN_CONNECTION_PERSIST_DISCOVERY_PROFILE_CONNECTION_MODE_AUTO
+);
 
   Result := FClient._WlanConnect(@FInterfaceGuid, @Params);
   If Assigned(MacList) Then

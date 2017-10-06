@@ -45,15 +45,11 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = ProfileSheet
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Bezdr'#225'tov'#233' s'#237't'#283
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -128,10 +124,6 @@ object Form1: TForm1
       Caption = 'S'#237#357'ov'#233' profily'
       ImageIndex = 1
       OnShow = ProfileSheetShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -174,11 +166,11 @@ object Form1: TForm1
         ReadOnly = True
         RowSelect = True
         ParentDoubleBuffered = False
+        ShowWorkAreas = True
         TabOrder = 1
         ViewStyle = vsReport
         OnData = ProfileListViewData
-        ExplicitLeft = 32
-        ExplicitWidth = 472
+        OnSelectItem = ProfileListViewSelectItem
       end
     end
   end
