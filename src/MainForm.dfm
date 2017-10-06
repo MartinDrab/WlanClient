@@ -45,7 +45,7 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = ProfileSheet
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
@@ -133,13 +133,23 @@ object Form1: TForm1
         TabOrder = 0
         object ProfileConnectButton: TButton
           Left = 8
-          Top = 8
+          Top = 2
           Width = 89
           Height = 25
           Caption = 'P'#345'ipojit'
           Enabled = False
           TabOrder = 0
           OnClick = NetworkConnectButtonClick
+        end
+        object ProfileDeleteButton: TButton
+          Left = 103
+          Top = 2
+          Width = 89
+          Height = 25
+          Caption = 'Odstranit'
+          Enabled = False
+          TabOrder = 1
+          OnClick = ProfileDeleteButtonClick
         end
       end
       object ProfileListView: TListView

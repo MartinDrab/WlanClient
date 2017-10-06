@@ -24,6 +24,7 @@ Type
     ProfileMenuPanel: TPanel;
     ProfileListView: TListView;
     ProfileConnectButton: TButton;
+    ProfileDeleteButton: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -38,6 +39,7 @@ Type
     procedure ProfileSheetShow(Sender: TObject);
     procedure ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure ProfileDeleteButtonClick(Sender: TObject);
   Private
     FWlanClient : TWlanAPICLient;
     FWlanBus : TWlanBus;
@@ -336,6 +338,20 @@ NetworkConnectButton.Enabled := (Selected) And (Not Net.Connected);
 Button2.Enabled := (Selected) And (Net.Connected);
 end;
 
+Procedure TForm1.ProfileDeleteButtonClick(Sender: TObject);
+Var
+  L : TListItem;
+  profile : TWlanProfile;
+begin
+L := ProfileListView.Selected;
+If Assigned(L) Then
+  begin
+  profile := FProfileList[L.Index];
+  profile.Delete;
+  RefreshProfiles(ComboBox1);
+  end;
+end;
+
 Procedure TForm1.ProfileListViewData(Sender: TObject; Item: TListItem);
 Var
   typeStr : WideString;
@@ -364,6 +380,7 @@ Procedure TForm1.ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
 ProfileConnectButton.Enabled := Assigned(Item);
+ProfileDeleteButton.Enabled := Assigned(Item);
 end;
 
 Procedure TForm1.ProfileSheetShow(Sender: TObject);
