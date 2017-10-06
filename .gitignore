@@ -2,3 +2,4 @@ bin
 tmp
 src/WLanClient.identcache
 src/WLanClient.dproj.local
+src/__history
