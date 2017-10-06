@@ -190,6 +190,21 @@ Type
     end;
   PWLAN_CONNECTION_PARAMETERS = ^WLAN_CONNECTION_PARAMETERS;
 
+  _WLAN_PROFILE_INFO = Record
+    ProfileName : Packed Array [0..255] Of WideChar;
+    Flags : Cardinal;
+    end;
+  WLAN_PROFILE_INFO = _WLAN_PROFILE_INFO;
+  PWLAN_PROFILE_INFO = ^WLAN_PROFILE_INFO;
+
+  _WLAN_PROFILE_INFO_LIST  = Record
+    NumberOfItems : Cardinal;
+    Index : Cardinal;
+    List : Array [0..0] Of WLAN_PROFILE_INFO;
+    end;
+  WLAN_PROFILE_INFO_LIST = _WLAN_PROFILE_INFO_LIST;
+  PWLAN_PROFILE_INFO_LIST = ^WLAN_PROFILE_INFO_LIST;
+
 Function WlanOpenHandle(dwClientVersion:DWORD; Reserved:PVOID; Var pdwNegotiatedVersion; Var phClientHandle:THandle):DWORD; StdCall;
 Function WlanCloseHandle(hClientHandle:THandle; Reserved:PVOID):DWORD; StdCall;
 Function WlanEnumInterfaces(hClientHandle:THandle; lpReserved:PVOID; Var pInterfaceList:PWLAN_INTERFACE_INFO_LIST):DWORD; StdCall;
