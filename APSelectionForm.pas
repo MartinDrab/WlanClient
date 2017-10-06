@@ -5,7 +5,8 @@ Interface
 Uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
-  wlanNetwork, wlanBssEntry, wlanAPI, Vcl.ExtCtrls, Vcl.StdCtrls;
+  wlanNetwork, wlanBssEntry, wlanAPI, Vcl.ExtCtrls, Vcl.StdCtrls,
+  Generics.Collections;
 
 type
   TForm2 = Class (TForm)
@@ -64,10 +65,10 @@ end;
 Procedure TForm2.FormCreate(Sender: TObject);
 Var
   I : Integer;
-  List : TList;
+  List : TObjectList<TWlanBssEntry>;
   Entry : TWlanBssEntry;
 begin
-List := TList.Create;
+List := TObjectList<TWlanBssEntry>.Create;
 If FNetwork.GetBssList(List) Then
   begin
   For I := 0 To List.Count - 1 Do

@@ -3,9 +3,13 @@ Unit WlanBssEntry;
 Interface
 
 Uses
-  Windows, WlanNetwork, WlanAPI;
+  Windows, WlanAPI;
 
 Type
+  TWlanNetworkBssType = (
+      wnbtUnknown, wnbtInfrastructure, wnbtIndependent,
+      wnbtAny);
+
   TWlanBssEntry = Class
     Private
       FSSID : WideString;

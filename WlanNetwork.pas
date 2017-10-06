@@ -3,20 +3,14 @@ Unit WlanNetwork;
 Interface
 
 Uses
-  WlanAPI, WlanAPIClient, WlanInterface,
-  Classes, Windows;
+  WlanAPI, WlanAPIClient, WlanInterface, WlanBssEntry,
+  Classes, Windows, Generics.Collections;
 
 Type
-  TWlanNetworkBssType = (
-      wnbtUnknown, wnbtInfrastructure, wnbtIndependent,
-      wnbtAny);
-
   TWlanNetworkAuthAlgorithm = (
       wnaaUnknown, wnaaOpen, wnaa80211SharedKey,
       wnaaWPA, wnaaWPAPSK, wnaaWPANone, wnaaRSNA,
       wnaaRSNAPSK, wnaaProprietary);
-
-
 
   TWlanNetwork = Class
     Private
@@ -43,7 +37,7 @@ Type
       Class Function BSSTypeToSTr(AType:TWlanNetworkBSSType):WideString;
       Function Connect(AEntries:TList = Nil):Boolean;
       Function Disconnect:Boolean;
-      Function GetBssList(AList:TList):Boolean;
+      Function GetBssList(AList:TObjectList<TWlanBssEntry>):Boolean;
 
       Property ProfileName : WideString Read FProfileName;
       Property SSID : WideString Read FSSID;
@@ -60,9 +54,6 @@ Type
     end;
 
 Implementation
-
-Uses
-  WlanBssEntry;
 
 
 Class Function TWlanNetwork.NewInstance(AClient:TWlanAPIClient; AInterface:TWlanInterface; ARecord:PWLAN_AVAILABLE_NETWORK_LIST):TWlanNetwork;
@@ -191,7 +182,7 @@ begin
 Result := FInterface.Disconnect;
 end;
 
-Function TWlanNetwork.GetBssList(AList:TList):Boolean;
+Function TWlanNetwork.GetBssList(AList:TObjectList<TWlanBssEntry>):Boolean;
 Var
   I, J : Integer;
   pSSID : DOT11_SSID;
@@ -217,9 +208,6 @@ If Result Then
       Else Tmp.Free;
       end
     Else begin
-      For J := 0 To AList.Count - 1 Do
-        TWlanBssEntry(AList[J]).Free;
-
       AList.Clear;
       Break;
       end;
