@@ -20,7 +20,8 @@ Type
       Function _WlanConnect(pInterfaceGuid:PGUID; pConnectionParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
       Function _WlanDisconnect(pInterfaceGuid:PGUID):Boolean;
       Function _WlanGetNetworkBssList(pInterfaceGuid:PGUID; pDot11Ssid:PDOT11_SSID; dot11BssType:DWORD; bSecurityEnabled:BOOL; Var pWlanBssList:PWLAN_BSS_LIST):Boolean;
-
+      Function _WlanGetProfileList(pInterfaceGuid:PGuid; Var AList:PWLAN_PROFILE_INFO_LIST):Boolean;
+      Function _WlanGetProfile(pInterfaceGuid:PGuid; ProfileName:PWideChar; DecryptPassword:Boolean; Var ProfileXML:PWideChar):Boolean;
 
       Function EnumInterfaces(AList:TList):Boolean;
 
@@ -71,6 +72,23 @@ end;
 Function TWlanAPIClient._WlanEnumInterfaces(Var AList:PWLAN_INTERFACE_INFO_LIST):Boolean;
 begin
 FError := WlanAPI.WlanEnumInterfaces(FHandle, Nil, AList);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanGetProfileList(pInterfaceGuid:PGuid; Var AList:PWLAN_PROFILE_INFO_LIST):Boolean;
+begin
+FError := WlanAPI.WlanGetProfileList(FHandle, pInterfaceGuid, Nil, AList);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanGetProfile(pInterfaceGuid:PGuid; ProfileName:PWideChar; DecryptPassword:Boolean; Var ProfileXML:PWideChar):Boolean;
+Var
+  ga : Cardinal;
+  flags : Cardinal;
+begin
+flags := 0;
+ga := 0;
+FError := WlanAPI.WlanGetProfile(FHandle, pInterfaceGuid, ProfileName, Nil, ProfileXML, flags, ga);
 Result := FError = ERROR_SUCCESS;
 end;
 
