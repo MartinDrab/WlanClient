@@ -25,7 +25,6 @@ Type
 
       Function Connect(AParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
       Function Disconnect:Boolean;
-      Function GetNetworkBssList(pDot11Ssid:PDOT11_SSID; dot11BssType:DWORD; bSecurityEnabled:BOOL; Var pWlanBssList:PWLAN_BSS_LIST):Boolean;
 
       Property Guid : TGUID Read FGuid;
       Property Description : WideString Read FDescription;
@@ -40,11 +39,6 @@ begin
 Try
   Result := TWlanInterface.Create;
 Except
-  If Assigned(Result) Then
-    begin
-    Result.Free;
-    Result := Nil;
-    end;
   end;
 
 If Assigned(Result) Then
@@ -116,10 +110,6 @@ begin
 Result := FClient._WlanDisconnect(@FGuid);
 end;
 
-Function TWlanInterface.GetNetworkBssList(pDot11Ssid:PDOT11_SSID; dot11BssType:DWORD; bSecurityEnabled:BOOL; Var pWlanBssList:PWLAN_BSS_LIST):Boolean;
-begin
-Result := FClient._WlanGetNetworkBssList(@FGuid, pDot11Ssid, dot11BssType, bSecurityEnabled, pWlanBssList);
-end;
 
 End.
 
