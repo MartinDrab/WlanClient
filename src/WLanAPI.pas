@@ -190,6 +190,12 @@ Type
     end;
   PWLAN_CONNECTION_PARAMETERS = ^WLAN_CONNECTION_PARAMETERS;
 
+Const
+  WLAN_PROFILE_GROUP_POLICY = 1;
+  WLAN_PROFILE_USER = 2;
+  WLAN_PROFILE_GET_PLAINTEXT_KEY = 4;
+
+Type
   _WLAN_PROFILE_INFO = Record
     ProfileName : Packed Array [0..255] Of WideChar;
     Flags : Cardinal;

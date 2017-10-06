@@ -327,7 +327,7 @@ With Item Do
   begin
   profile := FProfileList[Index];
   Caption := profile.Name;
-  SubItems.Add('<encrypted>');
+  SubItems.Add(profile.Password);
   end;
 end;
 
