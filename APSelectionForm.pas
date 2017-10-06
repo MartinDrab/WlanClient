@@ -68,7 +68,7 @@ Var
   List : TObjectList<TWlanBssEntry>;
   Entry : TWlanBssEntry;
 begin
-List := TObjectList<TWlanBssEntry>.Create;
+List := TObjectList<TWlanBssEntry>.Create(False);
 If FNetwork.GetBssList(List) Then
   begin
   For I := 0 To List.Count - 1 Do

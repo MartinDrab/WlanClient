@@ -52,7 +52,6 @@ object Form2: TForm2
     TabOrder = 0
     ViewStyle = vsReport
     OnDeletion = ListView1Deletion
-    ExplicitWidth = 458
   end
   object Panel1: TPanel
     Left = 0
@@ -61,7 +60,6 @@ object Form2: TForm2
     Height = 39
     Align = alBottom
     TabOrder = 1
-    ExplicitWidth = 458
     object Button1: TButton
       Left = 0
       Top = 6
