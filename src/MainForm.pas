@@ -25,6 +25,7 @@ Type
     ProfileListView: TListView;
     ProfileConnectButton: TButton;
     ProfileDeleteButton: TButton;
+    AdHocNetworkTabSheet: TTabSheet;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);

@@ -45,7 +45,7 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = TabSheet1
+    ActivePage = AdHocNetworkTabSheet
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
@@ -182,6 +182,10 @@ object Form1: TForm1
         OnData = ProfileListViewData
         OnSelectItem = ProfileListViewSelectItem
       end
+    end
+    object AdHocNetworkTabSheet: TTabSheet
+      Caption = 'S'#237#357' ad-hoc'
+      ImageIndex = 2
     end
   end
   object CardListTimer: TTimer
