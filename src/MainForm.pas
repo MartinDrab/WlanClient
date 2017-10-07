@@ -43,6 +43,15 @@ Type
     HNEnableDisableButton: TButton;
     HNStartStopButton: TButton;
     HNApplyButton: TButton;
+    HNMACAddressEdit: TEdit;
+    HNDeviceIdGuid: TEdit;
+    HNFrequencyEdit: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    HNPeerCountEdit: TEdit;
+    Label10: TLabel;
+    HNPeerListView: TListView;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -63,6 +72,7 @@ Type
     procedure HNEnableDisableButtonClick(Sender: TObject);
     procedure HNStartStopButtonClick(Sender: TObject);
     procedure HNApplyButtonClick(Sender: TObject);
+    procedure HNPeerListViewData(Sender: TObject; Item: TListItem);
   Private
     FHostedNetwork : TWlanHostedNetwork;
     FWlanClient : TWlanAPICLient;
@@ -363,8 +373,20 @@ Else begin
     HNEnableDisableButton.Caption := 'Disable';
   end;
 
-FHostedNetwork.Refresh;
 HNStartStopButton.Enabled := FHostedNetwork.Enabled;
+HostedNetworkTabSheetShow(Nil);
+end;
+
+Procedure TForm1.HNPeerListViewData(Sender: TObject; Item: TListItem);
+Var
+  peer : TWlanHostedNetworkPeer;
+begin
+With Item Do
+  begin
+  peer := FHostedNetwork.Peers[Index];
+  Caption := Format('%x-%x-%x-%x-%x=%x', [peer.MACAddress[0], peer.MACAddress[1], peer.MACAddress[2], peer.MACAddress[3], peer.MACAddress[4], peer.MACAddress[5]]);
+  SubItems.Add(BooleanToStr(peer.Authenticated))
+  end;
 end;
 
 Procedure TForm1.HNRefreshButtonClick(Sender: TObject);
@@ -384,12 +406,13 @@ Else begin
     HNStartStopButton.Caption := 'Stop';
   end;
 
-FHostedNetwork.Refresh;
 HNEnableDisableButton.Enabled := Not FHostedNetwork.Active;
+HostedNetworkTabSheetShow(Nil);
 end;
 
 Procedure TForm1.HostedNetworkTabSheetShow(Sender: TObject);
 begin
+HNPeerListView.Items.Count := 0;
 If Not Assigned(FHostedNetwork) Then
   FHostedNetwork := TWlanHostedNetwork.Create(FWlanClient)
 Else FHostedNetwork.Refresh;
@@ -414,6 +437,14 @@ Else HNStartStopButton.Caption := 'Start';
 
 HNStartStopButton.Enabled := FHostedNetwork.Enabled;
 HNEnableDisableButton.Enabled := Not FHostedNetwork.Active;
+If FHostedNetwork.Active Then
+  begin
+  HNMACAddressEdit.Text := Format('%x-%x-%x-%x-%x-%x', [FHostedNetwork.MACAddress[0], FHostedNetwork.MACAddress[1], FHostedNetwork.MACAddress[2], FHostedNetwork.MACAddress[3], FHostedNetwork.MACAddress[4], FHostedNetwork.MACAddress[5]]);
+  HNDeviceIdGuid.Text := GUIDToString(FHostedNetwork.DeviceID);
+  HNFrequencyEdit.Text := Format('%d', [FHostedNetwork.Channel]);
+  HNPeerCountEdit.Text := Format('%d', [FHostedNetwork.PeerCount]);
+  HNPeerListView.Items.Count := FHostedNetwork.PeerCount;
+  end;
 end;
 
 Procedure TForm1.ListView1Deletion(Sender: TObject; Item: TListItem);

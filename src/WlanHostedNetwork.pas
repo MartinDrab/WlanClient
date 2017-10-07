@@ -3,9 +3,21 @@ Unit WlanHostedNetwork;
 Interface
 
 Uses
-  WlanAPI, WlanAPIClient;
+  WlanAPI, WlanAPIClient,
+  Generics.Collections;
 
 Type
+  TWlanHostedNetworkPeer = Class
+    Private
+      FMACAddress : DOT11_MAC_ADDRESS;
+      FAuthenticated : Boolean;
+    Public
+      Constructor Create(Var ARecord:WLAN_HOSTED_NETWORK_PEER_STATE); Reintroduce;
+
+      Property MACAddress : DOT11_MAC_ADDRESS Read FMACAddress;
+      Property Authenticated : Boolean Read FAuthenticated;
+    end;
+
   TWlanHostedNetwork = Class
     Private
       FClient : TWlanAPIClient;
@@ -17,8 +29,16 @@ Type
       FMaxPeers : Cardinal;
       FEnabled : Boolean;
       FActive : Boolean;
+      FMACAddress : DOT11_MAC_ADDRESS;
+      FDeviceId : TGuid;
+      FChannel : Cardinal;
+      FPeerList : TObjectList<TWlanHostedNetworkPeer>;
+    Protected
+      Function GetPeerCount:Cardinal;
+      Function GetPeer(AIndex:Integer):TWlanHostedNetworkPeer;
     Public
       Constructor Create(AClient:TWlanAPIClient); Reintroduce;
+      Destructor Destroy; Override;
 
       Function Refresh:Boolean;
       Function SetPassword(APassword:WideString; APersistent:Boolean):Boolean;
@@ -37,6 +57,11 @@ Type
       Property MaxPeers : Cardinal Read FMaxPeers;
       Property Enabled : Boolean Read FEnabled;
       Property Active : Boolean Read FActive;
+      Property MACAddress : DOT11_MAC_ADDRESS Read FMACAddress;
+      Property DeviceID : TGuid Read FDeviceId;
+      Property Channel : Cardinal Read FChannel;
+      Property PeerCount : Cardinal Read GetPeerCount;
+      Property Peers [Index:Integer] : TWlanHostedNetworkPeer Read GetPeer;
     end;
 
 
@@ -53,8 +78,15 @@ FClient := AClient;
 If Not FClient._WlanHostedNetworkInitSettings Then
   Raise Exception.Create('Unable to initialize the HN');
 
+FPeerList := TObjectList<TWlanHostedNetworkPeer>.Create;
 If Not Refresh Then
   Raise Exception.Create('Unable to retrieve HN properties');
+end;
+
+Destructor TWlanHostedNetwork.Destroy;
+begin
+FPeerList.Free;
+Inherited Destroy;
 end;
 
 Function TWlanHostedNetwork.Refresh:Boolean;
@@ -71,6 +103,7 @@ Var
   isPersistent : LongBool;
   e : PLongBool;
 begin
+FPeerList.Clear;
 Result := FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_connection_settings, dataSize, Pointer(cs), valueType);
 If Not Result Then
   Exit;
@@ -114,6 +147,15 @@ If Not Result Then
 Case st.HostedNetworkState Of
   wlan_hosted_network_idle : FActive := False;
   wlan_hosted_network_active : FActive := True;
+  end;
+
+If st.HostedNetworkState <> wlan_hosted_network_unavailable Then
+  begin
+  FMACAddress := st.MacAddress;
+  FDeviceId := st.IPDeviceID;
+  FChannel := st.ChannelFrequency;
+  For I := 0 To st.dwNumberOfPeers - 1 Do
+    FPeerList.Add(TWlanHostedNetworkPeer.Create(st.PeerList[I]));
   end;
 
 WlanFreeMemory(st);
@@ -194,5 +236,23 @@ begin
 Result := FClient._WlanHostedNetworkStopUsing;
 end;
 
+Function TWlanHostedNetwork.GetPeerCount:Cardinal;
+begin
+Result := FPeerList.Count;
+end;
+
+Function TWlanHostedNetwork.GetPeer(AIndex:Integer):TWlanHostedNetworkPeer;
+begin
+Result := FPeerList[AIndex];
+end;
+
+(* TWlanHostedNetworkPeer *)
+
+Constructor TWlanHostedNetworkPeer.Create(Var ARecord:WLAN_HOSTED_NETWORK_PEER_STATE);
+begin
+Inherited Create;
+FMACAddress := ARecord.PeerMAC;
+FAuthenticated := ARecord.PeerAuthState = wlan_hosted_network_peer_state_authenticated;
+end;
 
 End.

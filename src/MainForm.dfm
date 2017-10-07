@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu]
   Caption = 'Bezdr'#225'tov'#253' klient'
   ClientHeight = 337
-  ClientWidth = 512
+  ClientWidth = 572
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object Form1: TForm1
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 512
+    Width = 572
     Height = 41
     Align = alTop
     TabOrder = 0
@@ -43,9 +43,9 @@ object Form1: TForm1
   object PageControl1: TPageControl
     Left = 0
     Top = 41
-    Width = 512
+    Width = 572
     Height = 296
-    ActivePage = HostedNetworkTabSheet
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
@@ -53,7 +53,7 @@ object Form1: TForm1
       object ListView1: TListView
         Left = 0
         Top = 35
-        Width = 504
+        Width = 564
         Height = 233
         Align = alClient
         Columns = <
@@ -94,7 +94,7 @@ object Form1: TForm1
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 504
+        Width = 564
         Height = 35
         Align = alTop
         TabOrder = 1
@@ -127,7 +127,7 @@ object Form1: TForm1
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
-        Width = 504
+        Width = 564
         Height = 33
         Align = alTop
         TabOrder = 0
@@ -155,7 +155,7 @@ object Form1: TForm1
       object ProfileListView: TListView
         Left = 0
         Top = 33
-        Width = 504
+        Width = 564
         Height = 235
         Align = alClient
         Columns = <
@@ -190,7 +190,7 @@ object Form1: TForm1
       object HostedNetworkLowerPanel: TPanel
         Left = 0
         Top = 33
-        Width = 504
+        Width = 564
         Height = 235
         Align = alClient
         TabOrder = 0
@@ -228,6 +228,34 @@ object Form1: TForm1
           Width = 50
           Height = 13
           Caption = 'Max peers'
+        end
+        object Label7: TLabel
+          Left = 240
+          Top = 6
+          Width = 63
+          Height = 13
+          Caption = 'MAC address'
+        end
+        object Label8: TLabel
+          Left = 240
+          Top = 28
+          Width = 46
+          Height = 13
+          Caption = 'Device ID'
+        end
+        object Label9: TLabel
+          Left = 240
+          Top = 55
+          Width = 39
+          Height = 13
+          Caption = 'Channel'
+        end
+        object Label10: TLabel
+          Left = 240
+          Top = 82
+          Width = 52
+          Height = 13
+          Caption = 'Peer count'
         end
         object HNSSIDEdit: TEdit
           Left = 97
@@ -290,11 +318,61 @@ object Form1: TForm1
           Caption = 'Save password'
           TabOrder = 5
         end
+        object HNMACAddressEdit: TEdit
+          Left = 320
+          Top = 0
+          Width = 233
+          Height = 21
+          TabOrder = 6
+        end
+        object HNDeviceIdGuid: TEdit
+          Left = 320
+          Top = 25
+          Width = 233
+          Height = 21
+          TabOrder = 7
+        end
+        object HNFrequencyEdit: TEdit
+          Left = 320
+          Top = 52
+          Width = 233
+          Height = 21
+          TabOrder = 8
+        end
+        object HNPeerCountEdit: TEdit
+          Left = 320
+          Top = 79
+          Width = 233
+          Height = 21
+          TabOrder = 9
+        end
+        object HNPeerListView: TListView
+          Left = 240
+          Top = 104
+          Width = 313
+          Height = 121
+          Columns = <
+            item
+              Caption = 'MAC address'
+              Width = 100
+            end
+            item
+              Caption = 'Authenticated'
+              Width = 90
+            end>
+          OwnerData = True
+          ReadOnly = True
+          RowSelect = True
+          ShowWorkAreas = True
+          TabOrder = 10
+          ViewStyle = vsReport
+          OnData = HNPeerListViewData
+        end
       end
       object HostedNetworkMenuPanel: TPanel
         Left = 0
         Top = 0
-        Width = 504
+        Width = 564
         Height = 33
         Align = alTop
         TabOrder = 1
@@ -340,7 +418,7 @@ object Form1: TForm1
   object CardListTimer: TTimer
     Enabled = False
     OnTimer = RefreshAll
-    Left = 248
-    Top = 144
+    Left = 64
+    Top = 256
   end
 end
