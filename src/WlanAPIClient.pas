@@ -10,6 +10,7 @@ Type
     Private
       FAPIVersion : DWORD;
       FError : LONG;
+      FFailureReason : WLAN_HOSTED_NETWORK_REASON;
       FHandle : THandle;
       Constructor Create; Reintroduce;
     Public
@@ -24,7 +25,20 @@ Type
       Function _WlanGetProfile(pInterfaceGuid:PGuid; ProfileName:PWideChar; Var Flags:Cardinal; Var ProfileXML:PWideChar):Boolean;
       Function _WlanDeleteProfile(pInterfaceGuid:PGuid; Profilename:PWideChar):Boolean;
 
+      Function _WlanHostedNetworkForceStart:Boolean;
+      Function _WlanHostedNetworkForceStop:Boolean;
+      Function _WlanHostedNetworkInitSettings:Boolean;
+      Function _WlanHostedNetworkRefreshSecuritySettings:Boolean;
+      Function _WlanHostedNetworkStartUsing:Boolean;
+      Function _WlanHostedNetworkStopUsing:Boolean;
+      Function _WlanHostedNetworkQueryStatus(Var Status:PWLAN_HOSTED_NETWORK_STATUS):Boolean;
+      Function _WlanHostedNetworkQueryProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
+      Function _WlanHostedNetworkSetProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer):Boolean;
+      Function _WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+      Function _WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+
       Property Error : LONG Read FError;
+      Property FailureReason : WLAN_HOSTED_NETWORK_REASON Read FFailureReason;
       Property APIVersion : DWORD Read FAPIVersion;
     end;
 
@@ -38,6 +52,8 @@ Constructor TWlanAPIClient.Create;
 begin
 Inherited Create;
 FHandle := 0;
+FError := ERROR_SUCCESS;
+FFailureReason := wlan_hosted_network_reason_success;
 end;
 
 
@@ -115,6 +131,85 @@ begin
 FError := WlanGetNetworkBssList(FHandle, pInterfaceGuid, pDot11Ssid, dot11BssType, bSecurityEnabled, Nil, pWlanBssList);
 Result := FError = ERROR_SUCCESS;
 end;
+
+
+Function TWlanAPIClient._WlanHostedNetworkForceStart:Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkForceStart(FHandle, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkForceStop:Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkForceStop(FHandle, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkInitSettings:Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkInitSettings(FHandle, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkRefreshSecuritySettings:Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkRefreshSecuritySettings(FHandle, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkStartUsing:Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkStartUsing(FHandle, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkStopUsing:Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkStopUsing(FHandle, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkQueryStatus(Var Status:PWLAN_HOSTED_NETWORK_STATUS):Boolean;
+begin
+FError := WlanHostedNetworkQueryStatus(FHandle, Status, Nil);
+Result :=FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkQueryProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
+begin
+Data := Nil;
+DataSize := 0;
+FError := WlanHostedNetworkQueryProperty(FHandle, OpCode, DataSize, Data, ValueType, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkSetProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer):Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkSetProperty(FHandle, OpCode, DataSize, Data, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkQuerySecondaryKey(FHandle, KeyLength, KeyData, IsPassPhrase, Persistent, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
+Function TWlanAPIClient._WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+begin
+FFailureReason := wlan_hosted_network_reason_success;
+FError := WlanHostedNetworkSetSecondaryKey(FHandle, KeyLength, KeyData, IsPassPhrase, Persistent, FFailureReason, Nil);
+Result := FError = ERROR_SUCCESS;
+end;
+
 
 
 End.

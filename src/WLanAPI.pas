@@ -320,9 +320,9 @@ Function WlanHostedNetworkStartUsing(hClientHandle:THandle; Var FailureReason:WL
 Function WlanHostedNetworkStopUsing(hClientHandle:THandle; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall;
 Function WlanHostedNetworkQueryStatus(hClientHandle:THandle; Var Status:PWLAN_HOSTED_NETWORK_STATUS; Reserved:Pointer):Cardinal; StdCall;
 Function WlanHostedNetworkQueryProperty(hClientHandle:THandle; OpCode:WLAN_HOSTED_NETWORK_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE; Reserved:Pointer):Cardinal; StdCall;
-Function WlanHostedNetworkSetProperty(hClientHandle:THandle; Var OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer; Var FailureReason:Cardinal; Reserved:Pointer):Cardinal; StdCall;
-Function WlanHostedNetworkQuerySecondaryKey(hClientHandle:THandle; Var KeyLength:Cardinal; Var KeyData:PChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall;
-Function WlanHostedNetworkSetSecondaryKey(hClientHandle:THandle; KeyLength:Cardinal; KeyData:PChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall;
+Function WlanHostedNetworkSetProperty(hClientHandle:THandle; OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall;
+Function WlanHostedNetworkQuerySecondaryKey(hClientHandle:THandle; Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall;
+Function WlanHostedNetworkSetSecondaryKey(hClientHandle:THandle; KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall;
 
 Implementation
 
@@ -350,9 +350,9 @@ Function WlanHostedNetworkStartUsing(hClientHandle:THandle; Var FailureReason:WL
 Function WlanHostedNetworkStopUsing(hClientHandle:THandle; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
 Function WlanHostedNetworkQueryStatus(hClientHandle:THandle; Var Status:PWLAN_HOSTED_NETWORK_STATUS; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
 Function WlanHostedNetworkQueryProperty(hClientHandle:THandle; OpCode:WLAN_HOSTED_NETWORK_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
-Function WlanHostedNetworkSetProperty(hClientHandle:THandle; Var OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer; Var FailureReason:Cardinal; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
-Function WlanHostedNetworkQuerySecondaryKey(hClientHandle:THandle; Var KeyLength:Cardinal; Var KeyData:PChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
-Function WlanHostedNetworkSetSecondaryKey(hClientHandle:THandle; KeyLength:Cardinal; KeyData:PChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
+Function WlanHostedNetworkSetProperty(hClientHandle:THandle; OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
+Function WlanHostedNetworkQuerySecondaryKey(hClientHandle:THandle; Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
+Function WlanHostedNetworkSetSecondaryKey(hClientHandle:THandle; KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON; Reserved:Pointer):Cardinal; StdCall; External WLANAPI_LIBRARY;
 
 
 
