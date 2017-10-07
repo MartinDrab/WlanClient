@@ -11,7 +11,8 @@ uses
   WlanBssEntry in 'WlanBssEntry.pas',
   APSelectionForm in 'APSelectionForm.pas' {Form2},
   WlanBus in 'WlanBus.pas',
-  WlanProfile in 'WlanProfile.pas';
+  WlanProfile in 'WlanProfile.pas',
+  WlanHostedNetwork in 'WlanHostedNetwork.pas';
 
 {$R *.RES}
 

@@ -34,8 +34,8 @@ Type
       Function _WlanHostedNetworkQueryStatus(Var Status:PWLAN_HOSTED_NETWORK_STATUS):Boolean;
       Function _WlanHostedNetworkQueryProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
       Function _WlanHostedNetworkSetProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer):Boolean;
-      Function _WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
-      Function _WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+      Function _WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool):Boolean;
+      Function _WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool):Boolean;
 
       Property Error : LONG Read FError;
       Property FailureReason : WLAN_HOSTED_NETWORK_REASON Read FFailureReason;
@@ -196,14 +196,14 @@ FError := WlanHostedNetworkSetProperty(FHandle, OpCode, DataSize, Data, FFailure
 Result := FError = ERROR_SUCCESS;
 end;
 
-Function TWlanAPIClient._WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+Function TWlanAPIClient._WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool):Boolean;
 begin
 FFailureReason := wlan_hosted_network_reason_success;
 FError := WlanHostedNetworkQuerySecondaryKey(FHandle, KeyLength, KeyData, IsPassPhrase, Persistent, FFailureReason, Nil);
 Result := FError = ERROR_SUCCESS;
 end;
 
-Function TWlanAPIClient._WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool; Var FailureReason:WLAN_HOSTED_NETWORK_REASON):Boolean;
+Function TWlanAPIClient._WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool):Boolean;
 begin
 FFailureReason := wlan_hosted_network_reason_success;
 FError := WlanHostedNetworkSetSecondaryKey(FHandle, KeyLength, KeyData, IsPassPhrase, Persistent, FFailureReason, Nil);

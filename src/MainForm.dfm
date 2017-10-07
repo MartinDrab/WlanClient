@@ -45,11 +45,15 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = AdHocNetworkTabSheet
+    ActivePage = HostedNetworkTabSheet
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Bezdr'#225'tov'#233' s'#237't'#283
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -124,6 +128,10 @@ object Form1: TForm1
       Caption = 'S'#237#357'ov'#233' profily'
       ImageIndex = 1
       OnShow = ProfileSheetShow
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -183,9 +191,10 @@ object Form1: TForm1
         OnSelectItem = ProfileListViewSelectItem
       end
     end
-    object AdHocNetworkTabSheet: TTabSheet
+    object HostedNetworkTabSheet: TTabSheet
       Caption = 'S'#237#357' ad-hoc'
       ImageIndex = 2
+      OnShow = HostedNetworkTabSheetShow
       object HostedNetworkLowerPanel: TPanel
         Left = 0
         Top = 33
@@ -193,8 +202,6 @@ object Form1: TForm1
         Height = 235
         Align = alClient
         TabOrder = 0
-        ExplicitTop = 0
-        ExplicitHeight = 33
         object Label2: TLabel
           Left = 8
           Top = 9

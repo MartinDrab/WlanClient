@@ -1,5 +1,6 @@
 Unit WLanAPI;
 
+{$Z4}
 
 Interface
 

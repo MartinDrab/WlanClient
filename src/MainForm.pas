@@ -5,7 +5,7 @@ Interface
 Uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, WLanAPI,
-  WlanAPIClient, WlanBus, WlanInterface, wlanNetwork, Vcl.ComCtrls,
+  WlanAPIClient, WlanBus, WlanInterface, wlanNetwork, WlanHostedNetwork, Vcl.ComCtrls,
   WlanBssEntry, WlanProfile, Vcl.OleCtrls, SHDocVw, Generics.Collections;
 
 Type
@@ -25,7 +25,7 @@ Type
     ProfileListView: TListView;
     ProfileConnectButton: TButton;
     ProfileDeleteButton: TButton;
-    AdHocNetworkTabSheet: TTabSheet;
+    HostedNetworkTabSheet: TTabSheet;
     HostedNetworkLowerPanel: TPanel;
     HostedNetworkMenuPanel: TPanel;
     HNSSIDEdit: TEdit;
@@ -53,7 +53,9 @@ Type
     procedure ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure ProfileDeleteButtonClick(Sender: TObject);
+    procedure HostedNetworkTabSheetShow(Sender: TObject);
   Private
+    FHostedNetwork : TWlanHostedNetwork;
     FWlanClient : TWlanAPICLient;
     FWlanBus : TWlanBus;
     FProfileList : TObjectList<TWlanProfile>;
@@ -330,6 +332,12 @@ CardList.Free;
 ComboBox1.ItemIndex := 0;
 RefreshNetworks(Nil);
 CardListTimer.Enabled := True;
+end;
+
+Procedure TForm1.HostedNetworkTabSheetShow(Sender: TObject);
+begin
+If Not Assigned(FHostedNetwork) Then
+  FHostedNetwork := TWlanHostedNetwork.Create(FWlanClient);
 end;
 
 Procedure TForm1.ListView1Deletion(Sender: TObject; Item: TListItem);
