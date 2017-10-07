@@ -45,7 +45,7 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = TabSheet1
+    ActivePage = AdHocNetworkTabSheet
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
@@ -186,6 +186,112 @@ object Form1: TForm1
     object AdHocNetworkTabSheet: TTabSheet
       Caption = 'S'#237#357' ad-hoc'
       ImageIndex = 2
+      object HostedNetworkLowerPanel: TPanel
+        Left = 0
+        Top = 33
+        Width = 504
+        Height = 235
+        Align = alClient
+        TabOrder = 0
+        ExplicitTop = 0
+        ExplicitHeight = 33
+        object Label2: TLabel
+          Left = 8
+          Top = 9
+          Width = 23
+          Height = 13
+          Caption = 'SSID'
+        end
+        object Label3: TLabel
+          Left = 8
+          Top = 33
+          Width = 46
+          Height = 13
+          Caption = 'Password'
+        end
+        object Label4: TLabel
+          Left = 8
+          Top = 60
+          Width = 70
+          Height = 13
+          Caption = 'Authentication'
+        end
+        object Label5: TLabel
+          Left = 8
+          Top = 87
+          Width = 51
+          Height = 13
+          Caption = 'Encryption'
+        end
+        object Label6: TLabel
+          Left = 8
+          Top = 111
+          Width = 50
+          Height = 13
+          Caption = 'Max peers'
+        end
+        object HNSSIDEdit: TEdit
+          Left = 97
+          Top = 3
+          Width = 89
+          Height = 21
+          TabOrder = 0
+        end
+        object HNPassowrdEdit: TEdit
+          Left = 97
+          Top = 30
+          Width = 89
+          Height = 21
+          TabOrder = 1
+        end
+        object HNAuthenticationComboBox: TComboBox
+          Left = 97
+          Top = 57
+          Width = 89
+          Height = 21
+          Style = csDropDownList
+          TabOrder = 2
+          Items.Strings = (
+            'Invalid'
+            'Open'
+            'WEP'
+            'WPA'
+            'WPA-PSK'
+            'WPA-NONE'
+            'WPA2'
+            'WPA2-PSK')
+        end
+        object HNEncryptionComboBox: TComboBox
+          Left = 97
+          Top = 84
+          Width = 89
+          Height = 21
+          Style = csDropDownList
+          TabOrder = 3
+          Items.Strings = (
+            'None'
+            '40-bit WEP'
+            'TKIP'
+            'Unused'
+            'CCMP'
+            '104-bit WEP')
+        end
+        object HNMaxPeersEdit: TEdit
+          Left = 97
+          Top = 111
+          Width = 89
+          Height = 21
+          TabOrder = 4
+        end
+      end
+      object HostedNetworkMenuPanel: TPanel
+        Left = 0
+        Top = 0
+        Width = 504
+        Height = 33
+        Align = alTop
+        TabOrder = 1
+      end
     end
   end
   object CardListTimer: TTimer

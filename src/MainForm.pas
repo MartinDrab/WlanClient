@@ -26,6 +26,18 @@ Type
     ProfileConnectButton: TButton;
     ProfileDeleteButton: TButton;
     AdHocNetworkTabSheet: TTabSheet;
+    HostedNetworkLowerPanel: TPanel;
+    HostedNetworkMenuPanel: TPanel;
+    HNSSIDEdit: TEdit;
+    HNPassowrdEdit: TEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    HNAuthenticationComboBox: TComboBox;
+    HNEncryptionComboBox: TComboBox;
+    HNMaxPeersEdit: TEdit;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
