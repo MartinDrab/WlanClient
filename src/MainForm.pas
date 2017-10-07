@@ -39,6 +39,10 @@ Type
     Label5: TLabel;
     Label6: TLabel;
     HNSavePasswordCheckBox: TCheckBox;
+    HNRefreshButton: TButton;
+    HNEnableDisableButton: TButton;
+    HNStartStopButton: TButton;
+    HNApplyButton: TButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -55,6 +59,10 @@ Type
       Selected: Boolean);
     procedure ProfileDeleteButtonClick(Sender: TObject);
     procedure HostedNetworkTabSheetShow(Sender: TObject);
+    procedure HNRefreshButtonClick(Sender: TObject);
+    procedure HNEnableDisableButtonClick(Sender: TObject);
+    procedure HNStartStopButtonClick(Sender: TObject);
+    procedure HNApplyButtonClick(Sender: TObject);
   Private
     FHostedNetwork : TWlanHostedNetwork;
     FWlanClient : TWlanAPICLient;
@@ -335,9 +343,57 @@ RefreshNetworks(Nil);
 CardListTimer.Enabled := True;
 end;
 
+Procedure TForm1.HNApplyButtonClick(Sender: TObject);
+begin
+FHostedNetwork.SetConnectionSettings(HNSSIDEdit.Text, StrToInt(HNMaxPeersEdit.Text));
+FHostedNetwork.SetSecuritySettings(HNAuthenticationComboBox.ItemIndex, HNEncryptionComboBox.ItemIndex);
+FHostedNetwork.SetPassword(HNPasswordEdit.Text, HNSavePasswordCheckBox.Checked);
+HostedNetworkTabSheetShow(Nil);
+end;
+
+procedure TForm1.HNEnableDisableButtonClick(Sender: TObject);
+begin
+If FHostedNetwork.Enabled Then
+  begin
+  If FHostedNetwork.Disable Then
+    HNEnableDisableButton.Caption := 'Enable';
+  end
+Else begin
+  If FHostedNetwork.Enable Then
+    HNEnableDisableButton.Caption := 'Disable';
+  end;
+
+FHostedNetwork.Refresh;
+HNStartStopButton.Enabled := FHostedNetwork.Enabled;
+end;
+
+Procedure TForm1.HNRefreshButtonClick(Sender: TObject);
+begin
+FHostedNetwork.Refresh;
+end;
+
+Procedure TForm1.HNStartStopButtonClick(Sender: TObject);
+begin
+If FHostedNetwork.Active Then
+  begin
+  If FHostedNetwork.Stop Then
+    HNStartStopButton.Caption := 'Start';
+  end
+Else begin
+  If FHostedNetwork.Start Then
+    HNStartStopButton.Caption := 'Stop';
+  end;
+
+FHostedNetwork.Refresh;
+HNEnableDisableButton.Enabled := Not FHostedNetwork.Active;
+end;
+
 Procedure TForm1.HostedNetworkTabSheetShow(Sender: TObject);
 begin
-FHostedNetwork := TWlanHostedNetwork.Create(FWlanClient);
+If Not Assigned(FHostedNetwork) Then
+  FHostedNetwork := TWlanHostedNetwork.Create(FWlanClient)
+Else FHostedNetwork.Refresh;
+
 HNSSIDEdit.Text := FHostedNetwork.SSID;
 HNPasswordEdit.Text := FHostedNetwork.Password;
 If FHostedNetwork.AuthAlgo < HNAuthenticationComboBox.Items.Count Then
@@ -348,6 +404,16 @@ If FHostedNetwork.CipherAlog < HNEncryptionComboBox.Items.Count Then
 
 HNMaxPeersEdit.Text := Format('%d', [FHostedNetwork.MaxPeers]);
 HNSavePasswordCheckBox.Checked := FHostedNetwork.Persistent;
+If FHostedNetwork.Enabled Then
+  HNEnableDisableButton.Caption := 'Disable'
+Else HNEnableDisableButton.Caption := 'Enable';
+
+If FHostedNetwork.Active Then
+  HNStartStopButton.Caption := 'Stop'
+Else HNStartStopButton.Caption := 'Start';
+
+HNStartStopButton.Enabled := FHostedNetwork.Enabled;
+HNEnableDisableButton.Enabled := Not FHostedNetwork.Active;
 end;
 
 Procedure TForm1.ListView1Deletion(Sender: TObject; Item: TListItem);

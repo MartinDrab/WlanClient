@@ -298,13 +298,49 @@ object Form1: TForm1
         Height = 33
         Align = alTop
         TabOrder = 1
+        object HNRefreshButton: TButton
+          Left = 8
+          Top = 2
+          Width = 89
+          Height = 25
+          Caption = 'Refresh'
+          TabOrder = 0
+          OnClick = HostedNetworkTabSheetShow
+        end
+        object HNEnableDisableButton: TButton
+          Left = 103
+          Top = 2
+          Width = 89
+          Height = 25
+          Caption = 'ED'
+          TabOrder = 1
+          OnClick = HNEnableDisableButtonClick
+        end
+        object HNStartStopButton: TButton
+          Left = 198
+          Top = 2
+          Width = 89
+          Height = 25
+          Caption = 'SS'
+          TabOrder = 2
+          OnClick = HNStartStopButtonClick
+        end
+        object HNApplyButton: TButton
+          Left = 293
+          Top = 2
+          Width = 89
+          Height = 25
+          Caption = 'Apply'
+          TabOrder = 3
+          OnClick = HNApplyButtonClick
+        end
       end
     end
   end
   object CardListTimer: TTimer
     Enabled = False
     OnTimer = RefreshAll
-    Left = 280
-    Top = 56
+    Left = 248
+    Top = 144
   end
 end

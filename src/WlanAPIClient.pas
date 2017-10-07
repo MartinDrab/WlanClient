@@ -177,6 +177,7 @@ end;
 
 Function TWlanAPIClient._WlanHostedNetworkQueryStatus(Var Status:PWLAN_HOSTED_NETWORK_STATUS):Boolean;
 begin
+Status := Nil;
 FError := WlanHostedNetworkQueryStatus(FHandle, Status, Nil);
 Result :=FError = ERROR_SUCCESS;
 end;

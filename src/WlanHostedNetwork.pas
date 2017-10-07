@@ -20,6 +20,7 @@ Type
     Public
       Constructor Create(AClient:TWlanAPIClient); Reintroduce;
 
+      Function Refresh:Boolean;
       Function SetPassword(APassword:WideString; APersistent:Boolean):Boolean;
       Function SetConnectionSettings(ASSID:WIdeString; AMaxPeers:Cardinal = 100):Boolean;
       Function SetSecuritySettings(AAuthAlgo:Cardinal; ACipherAlgo:Cardinal):Boolean;
@@ -44,7 +45,19 @@ Implementation
 Uses
   SysUtils;
 
+
 Constructor TWlanHostedNetwork.Create(AClient:TWlanAPIClient);
+begin
+Inherited Create;
+FClient := AClient;
+If Not FClient._WlanHostedNetworkInitSettings Then
+  Raise Exception.Create('Unable to initialize the HN');
+
+If Not Refresh Then
+  Raise Exception.Create('Unable to retrieve HN properties');
+end;
+
+Function TWlanHostedNetwork.Refresh:Boolean;
 Var
   I : Integer;
   dataSize : Cardinal;
@@ -56,16 +69,11 @@ Var
   keySize : Cardinal;
   isPassphrase : LongBool;
   isPersistent : LongBool;
-
   e : PLongBool;
 begin
-Inherited Create;
-FClient := AClient;
-If Not FClient._WlanHostedNetworkInitSettings Then
-  Raise Exception.Create('Unable to initialize the HN');
-
-If Not FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_connection_settings, dataSize, Pointer(cs), valueType) Then
-  Raise Exception.Create('Unable to read connection settings');
+Result := FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_connection_settings, dataSize, Pointer(cs), valueType);
+If Not Result Then
+  Exit;
 
 FMaxPeers := cs.MaxPeers;
 SetLength(FSSID, cs.SSID.uSSIDLength);
@@ -73,14 +81,16 @@ For I := 1 To cs.SSID.uSSIDLength Do
   FSSID[I] := WideChar(cs.SSID.ucSSID[I - 1]);
 
 WlanFreeMemory(cs);
-If Not FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_security_settings, dataSize, Pointer(ss), valueType) Then
-  Raise Exception.Create('Unable to read security settings');
+Result := FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_security_settings, dataSize, Pointer(ss), valueType);
+If Not Result Then
+  Exit;
 
 FAuthAlgo := ss.AuthAlgo;
 FCipherAlgo := ss.CipherAlgo;
 WlanFreeMemory(ss);
-If Not FClient._WlanHostedNetworkQuerySecondaryKey(keySize, key, isPassPhrase, isPersistent) Then
-  Raise Exception.Create('Unable to retrieve the password');
+Result := FClient._WlanHostedNetworkQuerySecondaryKey(keySize, key, isPassPhrase, isPersistent);
+If Not Result Then
+  Exit;
 
 If IsPassPhrase Then
   Dec(keySize);
@@ -91,13 +101,15 @@ For I := 1 To keySize Do
 
 FPersistent := IsPersistent;
 WlanFreeMemory(key);
-If Not FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_enable, dataSize, Pointer(e), valueType) Then
-  Raise Exception.Create('Unable to query network enabled state');
+Result := FClient._WlanHostedNetworkQueryProperty(wlan_hosted_network_opcode_enable, dataSize, Pointer(e), valueType);
+If Not Result Then
+  Exit;
 
 FEnabled := e^;
 WlanFreeMemory(e);
-If Not FClient._WlanHostedNetworkQueryStatus(st) Then
-  Raise Exception.Create('Unable to query network status');
+Result := FClient._WlanHostedNetworkQueryStatus(st);
+If Not Result Then
+  Exit;
 
 Case st.HostedNetworkState Of
   wlan_hosted_network_idle : FActive := False;
@@ -107,22 +119,28 @@ Case st.HostedNetworkState Of
 WlanFreeMemory(st);
 end;
 
+
+
 Function TWlanHostedNetwork.SetPassword(APassword:WideString; APersistent:Boolean):Boolean;
 Var
   I : Integer;
   key : PAnsiChar;
 begin
-key := WLanAllocateMemory(Length(APassword) + 1);
-Result := Assigned(key);
-If Result Then
+If Length(APassword) > 0 Then
   begin
-  FillChar(key^, Length(APassword) + 1, 0);
-  For I := 1 To Length(APassword) Do
-    key[I - 1] := AnsiChar(APassword[I]);
+  key := WLanAllocateMemory(Length(APassword) + 1);
+  Result := Assigned(key);
+  If Result Then
+    begin
+    FillChar(key^, Length(APassword) + 1, 0);
+    For I := 1 To Length(APassword) Do
+      key[I - 1] := AnsiChar(APassword[I]);
 
-  Result := FClient._WlanHostedNetworkSetSecondaryKey(Length(APassword) + 1, key, True, APersistent);
-  WlanFreeMemory(key);
-  end;
+    Result := FClient._WlanHostedNetworkSetSecondaryKey(Length(APassword) + 1, key, True, APersistent);
+    WlanFreeMemory(key);
+    end;
+  end
+Else Result := FClient._WlanHostedNetworkSetSecondaryKey(0, Nil, True, APersistent);
 end;
 
 Function TWlanHostedNetwork.SetConnectionSettings(ASSID:WIdeString; AMaxPeers:Cardinal = 100):Boolean;
