@@ -50,10 +50,6 @@ object Form1: TForm1
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Bezdr'#225'tov'#233' s'#237't'#283
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -128,10 +124,6 @@ object Form1: TForm1
       Caption = 'S'#237#357'ov'#233' profily'
       ImageIndex = 1
       OnShow = ProfileSheetShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -244,7 +236,7 @@ object Form1: TForm1
           Height = 21
           TabOrder = 0
         end
-        object HNPassowrdEdit: TEdit
+        object HNPasswordEdit: TEdit
           Left = 97
           Top = 30
           Width = 89
@@ -289,6 +281,14 @@ object Form1: TForm1
           Width = 89
           Height = 21
           TabOrder = 4
+        end
+        object HNSavePasswordCheckBox: TCheckBox
+          Left = 96
+          Top = 136
+          Width = 97
+          Height = 17
+          Caption = 'Save password'
+          TabOrder = 5
         end
       end
       object HostedNetworkMenuPanel: TPanel

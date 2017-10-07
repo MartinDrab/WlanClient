@@ -29,7 +29,7 @@ Type
     HostedNetworkLowerPanel: TPanel;
     HostedNetworkMenuPanel: TPanel;
     HNSSIDEdit: TEdit;
-    HNPassowrdEdit: TEdit;
+    HNPasswordEdit: TEdit;
     Label2: TLabel;
     Label3: TLabel;
     HNAuthenticationComboBox: TComboBox;
@@ -38,6 +38,7 @@ Type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    HNSavePasswordCheckBox: TCheckBox;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -336,8 +337,17 @@ end;
 
 Procedure TForm1.HostedNetworkTabSheetShow(Sender: TObject);
 begin
-If Not Assigned(FHostedNetwork) Then
-  FHostedNetwork := TWlanHostedNetwork.Create(FWlanClient);
+FHostedNetwork := TWlanHostedNetwork.Create(FWlanClient);
+HNSSIDEdit.Text := FHostedNetwork.SSID;
+HNPasswordEdit.Text := FHostedNetwork.Password;
+If FHostedNetwork.AuthAlgo < HNAuthenticationComboBox.Items.Count Then
+  HNAuthenticationComboBox.ItemIndex := FHostedNetwork.AuthAlgo;
+
+If FHostedNetwork.CipherAlog < HNEncryptionComboBox.Items.Count Then
+  HNEncryptionComboBox.ItemIndex := FHostedNetwork.CipherAlog;
+
+HNMaxPeersEdit.Text := Format('%d', [FHostedNetwork.MaxPeers]);
+HNSavePasswordCheckBox.Checked := FHostedNetwork.Persistent;
 end;
 
 Procedure TForm1.ListView1Deletion(Sender: TObject; Item: TListItem);
