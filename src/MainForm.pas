@@ -398,7 +398,7 @@ Procedure TForm1.HNStartStopButtonClick(Sender: TObject);
 begin
 If FHostedNetwork.Active Then
   begin
-  If FHostedNetwork.Stop Then
+  If FHostedNetwork.Stop(True) Then
     HNStartStopButton.Caption := 'Start';
   end
 Else begin

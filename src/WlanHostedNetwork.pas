@@ -47,7 +47,7 @@ Type
       Function Enable:Boolean;
       Function Disable:Boolean;
       Function Start:Boolean;
-      Function Stop:Boolean;
+      Function Stop(AForce:Boolean = False):Boolean;
 
       Property SSID : WideString Read FSSID;
       Property Password : WideString Read FPassword;
@@ -85,6 +85,9 @@ end;
 
 Destructor TWlanHostedNetwork.Destroy;
 begin
+If FActive Then
+  Stop(False);
+
 FPeerList.Free;
 Inherited Destroy;
 end;
@@ -231,9 +234,11 @@ Result := FClient._WlanHostedNetworkStartUsing;
 end;
 
 
-Function TWlanHostedNetwork.Stop:Boolean;
+Function TWlanHostedNetwork.Stop(AForce:Boolean = False):Boolean;
 begin
-Result := FClient._WlanHostedNetworkStopUsing;
+If AForce Then
+  Result := FClient._WlanHostedNetworkForceStop
+Else Result := FClient._WlanHostedNetworkStopUsing;
 end;
 
 Function TWlanHostedNetwork.GetPeerCount:Cardinal;
