@@ -45,7 +45,7 @@ object Form1: TForm1
     Top = 41
     Width = 512
     Height = 296
-    ActivePage = AdHocNetworkTabSheet
+    ActivePage = TabSheet1
     Align = alClient
     TabOrder = 1
     object TabSheet1: TTabSheet
