@@ -24,6 +24,7 @@ Type
 
       Function EnumNetworks(AList:TObjectList<TWlanNetwork>):Boolean;
       Function EnumProfiles(AList:TObjectList<TWlanProfile>):Boolean;
+      Function NetworkBySSID(ASSID:WideString):TWlanNetwork;
       Function Connect(AParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
       Function Disconnect:Boolean;
 
@@ -139,6 +140,31 @@ end;
 Function TWlanInterface.Disconnect:Boolean;
 begin
 Result := FClient._WlanDisconnect(@FGuid);
+end;
+
+Function TWlanInterface.NetworkBySSID(ASSID:WideString):TWlanNetwork;
+Var
+  I : Integer;
+  L : TObjectList<TWlanNetwork>;
+begin
+Result := Nil;
+L := TObjectList<TWlanNetwork>.Create;
+If EnumNetworks(L) Then
+  begin
+  For I := 0 To L.Count - 1 Do
+    begin
+    If L[I].SSID = ASSID Then
+      begin
+      Result := L[I];
+      L.OwnsObjects := False;
+      L.Delete(I);
+      L.OwnsObjects := True;
+      Break;
+      end;
+    end;
+  end;
+
+L.Free;
 end;
 
 
