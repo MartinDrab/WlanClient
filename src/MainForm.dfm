@@ -185,8 +185,6 @@ object Form1: TForm1
         ViewStyle = vsReport
         OnData = ProfileListViewData
         OnSelectItem = ProfileListViewSelectItem
-        ExplicitLeft = 32
-        ExplicitWidth = 532
       end
     end
     object HostedNetworkTabSheet: TTabSheet

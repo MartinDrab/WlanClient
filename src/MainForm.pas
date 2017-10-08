@@ -252,9 +252,11 @@ Var
   L : TListItem;
   P : TWlanProfile;
   N : TWlanNetwork;
+  C : TWlanInterface;
 begin
 N := Nil;
 P := Nil;
+C := Nil;
 CardListTimer.Enabled := False;
 If Sender = NetworkConnectButton Then
   begin
@@ -272,12 +274,13 @@ Else If Sender = ProfileConnectButton Then
     begin
     ProfileListView.Selected := Nil;
     P := FProfileList[L.Index];
+    C := FWlanBus.InterfaceByGuid(P.InterfaceGuid);
     end;
   end;
 
 If (Assigned(N) Or Assigned(P)) Then
   begin
-  With TForm2.Create(Application, N, P) Do
+  With TForm2.Create(Application, N, P, C) Do
     begin
     ShowModal;
     If Not Cancelled Then
@@ -285,7 +288,7 @@ If (Assigned(N) Or Assigned(P)) Then
       if Assigned(N) Then
         N.Connect(MacList, HiddenNetwork, CreateProfile, AutoConnect)
       Else If Assigned(P) Then
-        P.Connect;
+        P.Connect(MacList);
 
       MacList.Free;
       end;

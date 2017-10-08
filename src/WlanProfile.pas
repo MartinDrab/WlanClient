@@ -3,7 +3,8 @@ Unit WlanProfile;
 Interface
 
 Uses
-  WlanAPI, WlanAPIClient;
+  WlanAPI, WlanAPIClient, WlanBssEntry,
+  Generics.Collections;
 
 Type
   TWlanProfile = Class
@@ -24,7 +25,7 @@ Type
       Class Function NewInstance(AClient:TWlanAPIClient; Var AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
 
       Function Delete:Boolean;
-      Function Connect:Boolean;
+      Function Connect(ABssList:TObjectList<TWlanBssEntry>):Boolean;
 
       Property Name : WideString Read FName;
       Property XML : WideString Read FXML;
@@ -143,17 +144,42 @@ begin
 Result := FClient._WlanDeleteProfile(@FInterfaceGuid, PWideChar(FName));
 end;
 
-Function TWlanProfile.Connect:Boolean;
+Function TWlanProfile.Connect(ABssList:TObjectList<TWlanBssEntry>):Boolean;
 Var
+  I : Integer;
+  bssList : PDOT11_BSSID_LIST;
   cp : WLAN_CONNECTION_PARAMETERS;
 begin
-cp.wlanConnectionMode := wlan_connection_mode_profile;
-cp.strProfile := PWideChar(FName);
-cp.pDot11Ssid := Nil;
-cp.pDesiredBssidList := Nil;
-cp.dot11BssType := dot11_BSS_type_infrastructure;
-cp.dwFlags := 0;
-Result := FClient._WlanConnect(@FInterfaceGuid, @cp);
+Result := True;
+bssList := Nil;
+If ABssList.Count > 0 Then
+  begin
+  bssList := WlanAllocateMemory(SizeOf(DOT11_BSSID_LIST) + SizeOf(DOT11_MAC_ADDRESS  )*ABssList.Count);
+  Result := Assigned(bssList);
+  If Result Then
+    begin
+    bssList.Header.HdrType := NDIS_OBJECT_TYPE_DEFAULT;
+    bssList.Header.Revision := DOT11_BSSID_LIST_REVISION_1;
+    bssList.Header.Size := SizeOf(DOT11_BSSID_LIST) + ABssList.Count * SizeOf(DOT11_MAC_ADDRESS);
+    bssList.uNumOfEntries := ABssList.Count;
+    bssList.uTotalNumOfEntries := ABssList.Count;
+    For I := 0 To ABssList.Count - 1 Do
+      bssList.BSSIDs[I] := ABssList[I].MacAddress;
+    end;
+  end;
+
+If Result Then
+  begin
+  cp.wlanConnectionMode := wlan_connection_mode_profile;
+  cp.strProfile := PWideChar(FName);
+  cp.pDot11Ssid := Nil;
+  cp.pDesiredBssidList := bssList;
+  cp.dot11BssType := dot11_BSS_type_infrastructure;
+  cp.dwFlags := 0;
+  Result := FClient._WlanConnect(@FInterfaceGuid, @cp);
+  If Assigned(bssList) Then
+    WlanFreeMemory(bssList);
+  end;
 end;
 
 

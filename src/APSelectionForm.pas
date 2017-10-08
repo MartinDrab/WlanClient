@@ -5,7 +5,7 @@ Interface
 Uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
-  wlanNetwork, wlanBssEntry, wlanAPI, WlanProfile, Vcl.ExtCtrls, Vcl.StdCtrls,
+  wlanInterface, wlanNetwork, wlanBssEntry, wlanAPI, WlanProfile, Vcl.ExtCtrls, Vcl.StdCtrls,
   Generics.Collections;
 
 type
@@ -22,12 +22,13 @@ type
     FCancelled : Boolean;
     FNetwork : TWlanNetwork;
     FProfile : TWlanProfile;
+    FCard : TWlanInterface;
     FMACList : TObjectList<TWlanBssEntry>;
     FCreateProfile : Boolean;
     FAutoConnect : Boolean;
     FHiddenNetwork : Boolean;
   Public
-    Constructor Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile); Reintroduce;
+    Constructor Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile; ACard:TWlanInterface); Reintroduce;
 
     Property MacList : TObjectList<TWlanBssEntry> Read FMacList;
     Property Cancelled : Boolean Read FCancelled;
@@ -66,10 +67,11 @@ FHiddenNetwork := HiddenNetworkCheckBox.Checked;
 Close;
 end;
 
-Constructor TForm2.Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile);
+Constructor TForm2.Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile; ACard:TWlanInterface);
 begin
 FNetwork := ANetwork;
 FProfile := AProfile;
+FCard := ACard;
 FCancelled := True;
 Inherited Create(AOwner);
 end;
@@ -81,11 +83,14 @@ Var
   List : TObjectList<TWlanBssEntry>;
   Entry : TWlanBssEntry;
 begin
+If (Not Assigned(FNetwork)) And (Assigned(FCard)) Then
+  FNetwork := FCard.NetworkBySSID(FProfile.SSID);
+
 If Assigned(FNetwork) Then
   begin
-  CreateProfileCheckBox.Enabled := True;
-  AutoConnectCheckBox.Enabled := True;
-  HiddenNetworkCheckBox.Enabled := True;
+  CreateProfileCheckBox.Enabled := Not Assigned(FProfile);
+  AutoConnectCheckBox.Enabled := Not Assigned(FProfile);
+  HiddenNetworkCheckBox.Enabled := Not Assigned(FProfile);
   List := TObjectList<TWlanBssEntry>.Create(False);
   If FNetwork.GetBssList(List) Then
     begin
@@ -106,9 +111,6 @@ If Assigned(FNetwork) Then
     end;
 
   List.Free;
-  end
-Else begin
-
   end;
 end;
 
