@@ -46,7 +46,7 @@ Type
       Function SetSecuritySettings(AAuthAlgo:Cardinal; ACipherAlgo:Cardinal):Boolean;
       Function Enable:Boolean;
       Function Disable:Boolean;
-      Function Start:Boolean;
+      Function Start(AForce:Boolean = False):Boolean;
       Function Stop(AForce:Boolean = False):Boolean;
 
       Property SSID : WideString Read FSSID;
@@ -85,9 +85,6 @@ end;
 
 Destructor TWlanHostedNetwork.Destroy;
 begin
-If FActive Then
-  Stop(False);
-
 FPeerList.Free;
 Inherited Destroy;
 end;
@@ -228,9 +225,11 @@ e := False;
 Result := FClient._WlanHostedNetworkSetProperty(wlan_hosted_network_opcode_enable, SizeOf(e), @e);
 end;
 
-Function TWlanHostedNetwork.Start:Boolean;
+Function TWlanHostedNetwork.Start(AForce:Boolean = False):Boolean;
 begin
-Result := FClient._WlanHostedNetworkStartUsing;
+If AForce Then
+  FClient._WlanHostedNetworkForceStart
+Else Result := FClient._WlanHostedNetworkStartUsing;
 end;
 
 

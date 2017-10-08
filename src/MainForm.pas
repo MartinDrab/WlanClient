@@ -402,7 +402,7 @@ If FHostedNetwork.Active Then
     HNStartStopButton.Caption := 'Start';
   end
 Else begin
-  If FHostedNetwork.Start Then
+  If FHostedNetwork.Start(True) Then
     HNStartStopButton.Caption := 'Stop';
   end;
 
