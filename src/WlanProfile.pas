@@ -22,6 +22,7 @@ Type
       Class Function NewInstance(AClient:TWlanAPIClient; Var AInterfaceGuid:TGuid; Var ARecord:WLAN_PROFILE_INFO):TWlanProfile;
 
       Function Delete:Boolean;
+      Function Connect:Boolean;
 
       Property Name : WideString Read FName;
       Property XML : WideString Read FXML;
@@ -94,6 +95,19 @@ end;
 Function TWlanProfile.Delete:Boolean;
 begin
 Result := FClient._WlanDeleteProfile(@FInterfaceGuid, PWideChar(FName));
+end;
+
+Function TWlanProfile.Connect:Boolean;
+Var
+  cp : WLAN_CONNECTION_PARAMETERS;
+begin
+cp.wlanConnectionMode := wlan_connection_mode_profile;
+cp.strProfile := PWideChar(FName);
+cp.pDot11Ssid := Nil;
+cp.pDesiredBssidList := Nil;
+cp.dot11BssType := dot11_BSS_type_infrastructure;
+cp.dwFlags := 0;
+Result := FClient._WlanConnect(@FInterfaceGuid, @cp);
 end;
 
 

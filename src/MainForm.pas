@@ -253,6 +253,8 @@ Var
   P : TWlanProfile;
   N : TWlanNetwork;
 begin
+N := Nil;
+P := Nil;
 CardListTimer.Enabled := False;
 If Sender = NetworkConnectButton Then
   begin
@@ -280,9 +282,16 @@ If (Assigned(N) Or Assigned(P)) Then
     ShowModal;
     If Not Cancelled Then
       begin
-      N.Connect(MacList, HiddenNetwork, CreateProfile, AutoConnect);
-      MacList.Clear;
-      MacList.Free;
+      if Assigned(N) Then
+        begin
+        N.Connect(MacList, HiddenNetwork, CreateProfile, AutoConnect);
+        MacList.Clear;
+        MacList.Free;
+        end
+      Else If Assigned(P) Then
+        begin
+        P.Connect;
+        end;
       end;
 
     Free;
