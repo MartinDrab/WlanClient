@@ -32,7 +32,7 @@ object Form2: TForm2
         Caption = 'SSID'
       end
       item
-        Caption = 'V'#253'kon (mW)'
+        Caption = 'V'#253'kon (dB)'
         Width = 75
       end
       item
@@ -51,8 +51,6 @@ object Form2: TForm2
     RowSelect = True
     TabOrder = 0
     ViewStyle = vsReport
-    OnDeletion = ListView1Deletion
-    ExplicitHeight = 182
   end
   object Panel1: TPanel
     Left = 0

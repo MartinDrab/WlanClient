@@ -283,15 +283,11 @@ If (Assigned(N) Or Assigned(P)) Then
     If Not Cancelled Then
       begin
       if Assigned(N) Then
-        begin
-        N.Connect(MacList, HiddenNetwork, CreateProfile, AutoConnect);
-        MacList.Clear;
-        MacList.Free;
-        end
+        N.Connect(MacList, HiddenNetwork, CreateProfile, AutoConnect)
       Else If Assigned(P) Then
-        begin
         P.Connect;
-        end;
+
+      MacList.Free;
       end;
 
     Free;
@@ -509,6 +505,7 @@ With Item Do
     typeStr := 'Global';
 
   SubItems.Add(typeStr);
+  SubItems.Add(profile.SSID);
   SubItems.Add(profile.Password);
   end;
 end;

@@ -18,7 +18,6 @@ type
     HiddenNetworkCheckBox: TCheckBox;
     Procedure FormCreate(Sender: TObject);
     Procedure Button1Click(Sender: TObject);
-    Procedure ListView1Deletion(Sender: TObject; Item: TListItem);
   Private
     FCancelled : Boolean;
     FNetwork : TWlanNetwork;
@@ -113,13 +112,6 @@ Else begin
   end;
 end;
 
-Procedure TForm2.ListView1Deletion(Sender: TObject; Item: TListItem);
-begin
-If Assigned(Item.Data) Then
-  begin
-  TWlanBssEntry(Item.Data).Free;
-  Item.Data := Nil;
-  end;
-end;
 
 End.
+
