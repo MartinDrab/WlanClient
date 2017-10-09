@@ -14,17 +14,20 @@ Const
 
 
 
-Const
-  // Interface state
-  wlan_interface_state_not_ready = 0;
-  wlan_interface_state_connected = 1;
-  wlan_interface_state_ad_hoc_network_formed = 2;
-  wlan_interface_state_disconnecting = 3;
-  wlan_interface_state_disconnected = 4;
-  wlan_interface_state_associating = 5;
-  wlan_interface_state_discovering = 6;
-  wlan_interface_state_authenticating = 7;
+Type
+  _WLAN_INTERFACE_STATE = (
+    wlan_interface_state_not_ready,
+    wlan_interface_state_connected,
+    wlan_interface_state_ad_hoc_network_formed,
+    wlan_interface_state_disconnecting,
+    wlan_interface_state_disconnected,
+    wlan_interface_state_associating,
+    wlan_interface_state_discovering,
+    wlan_interface_state_authenticating);
+  WLAN_INTERFACE_STATE = _WLAN_INTERFACE_STATE;
+  PWLAN_INTERFACE_STATE = ^WLAN_INTERFACE_STATE;
 
+Const
   DOT11_SSID_MAX_LENGTH = 32;
   WLAN_MAX_PHY_TYPE_NUMBER = 8;
   DOT11_RATE_SET_MAX_LENGTH = 126;
@@ -74,14 +77,18 @@ Const
   WLAN_AVAILABLE_NETWORK_CONNECTED = 1;
   WLAN_AVAILABLE_NETWORK_HAS_PROFILE = 2;
 
-  // Connection mode
-  wlan_connection_mode_profile = 0;
-  wlan_connection_mode_temporary_profile = 1;
-  wlan_connection_mode_discovery_secure = 2;
-  wlan_connection_mode_discovery_unsecure = 3;
-  wlan_connection_mode_auto = 4;
-  wlan_connection_mode_invalid = 5;
+Type
+  _WLAN_CONNECTION_MODE = (
+    wlan_connection_mode_profile,
+    wlan_connection_mode_temporary_profile,
+    wlan_connection_mode_discovery_secure,
+    wlan_connection_mode_discovery_unsecure,
+    wlan_connection_mode_auto,
+    wlan_connection_mode_invalid);
+  WLAN_CONNECTION_MODE = _WLAN_CONNECTION_MODE;
+  PWLAN_CONNECTION_MODE = ^WLAN_CONNECTION_MODE;
 
+Const
   WLAN_CONNECTION_HIDDEN_NETWORK = $1;
   WLAN_CONNECTION_ADHOC_JOIN_ONLY = $2;
   WLAN_CONNECTION_IGNORE_PRIVACY_BIT = $4;
@@ -191,7 +198,7 @@ Type
   PDOT11_BSSID_LIST = ^DOT11_BSSID_LIST;
 
   WLAN_CONNECTION_PARAMETERS = Record
-    wlanConnectionMode : ULONG;
+    wlanConnectionMode : WLAN_CONNECTION_MODE;
     strProfile : LPCWSTR;
     pDot11Ssid : PDOT11_SSID;
     pDesiredBssidList : PDOT11_BSSID_LIST;
@@ -333,6 +340,38 @@ Type
     wlan_intf_opcode_management_frame_protection_capable);
   WLAN_INTF_OPCODE = _WLAN_INTF_OPCODE;
   PWLAN_INTF_OPCODE = ^WLAN_INTF_OPCODE;
+
+  _WLAN_ASSOCIATION_ATTRIBUTES = Record
+    SSID : DOT11_SSID;
+    dot11BssType : Cardinal;
+    MACAddress : DOT11_MAC_ADDRESS;
+    PhyType : Cardinal;
+    PhyIndex : Cardinal;
+    SignalQuality : Cardinal;
+    RxRate : Cardinal;
+    TxRate : Cardinal;
+    end;
+  WLAN_ASSOCIATION_ATTRIBUTES = _WLAN_ASSOCIATION_ATTRIBUTES;
+  PWLAN_ASSOCIATION_ATTRIBUTES = ^WLAN_ASSOCIATION_ATTRIBUTES;
+
+  _WLAN_SECURITY_ATTRIBUTES = Record
+    SecurityEnabled : LongBool;
+    OneXEnabled : LongBool;
+    AuthAlgorithm : Cardinal;
+    CipherAlgorithm : Cardinal;
+    end;
+  WLAN_SECURITY_ATTRIBUTES = _WLAN_SECURITY_ATTRIBUTES;
+  PWLAN_SECURITY_ATTRIBUTES = ^WLAN_SECURITY_ATTRIBUTES;
+
+  _WLAN_CONNECTION_ATTRIBUTES = Record
+    State : WLAN_INTERFACE_STATE;
+    ConnectionMode : WLAN_CONNECTION_MODE;
+    ProfileName : Packed Array [0..255] Of WideChar;
+    AssociationAttributes : WLAN_ASSOCIATION_ATTRIBUTES;
+    SecurityAttributes : WLAN_SECURITY_ATTRIBUTES;
+    end;
+  WLAN_CONNECTION_ATTRIBUTES = _WLAN_CONNECTION_ATTRIBUTES;
+  PWLAN_CONNECTION_ATTRIBUTES = ^WLAN_CONNECTION_ATTRIBUTES;
 
 Function WlanOpenHandle(dwClientVersion:DWORD; Reserved:PVOID; Var pdwNegotiatedVersion; Var phClientHandle:THandle):DWORD; StdCall;
 Function WlanCloseHandle(hClientHandle:THandle; Reserved:PVOID):DWORD; StdCall;
