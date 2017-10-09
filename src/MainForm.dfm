@@ -1,8 +1,8 @@
-object Form1: TForm1
+object MainWlanClientForm: TMainWlanClientForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
-  Caption = 'Bezdr'#225'tov'#253' klient'
+  Caption = 'Wireless LAN Client'
   ClientHeight = 337
   ClientWidth = 572
   Color = clBtnFace
@@ -26,12 +26,12 @@ object Form1: TForm1
     object Label1: TLabel
       Left = 4
       Top = 14
-      Width = 59
+      Width = 64
       Height = 13
-      Caption = 'S'#237#357'ov'#225' karta'
+      Caption = 'Network card'
     end
     object ComboBox1: TComboBox
-      Left = 69
+      Left = 74
       Top = 14
       Width = 345
       Height = 21
@@ -45,11 +45,11 @@ object Form1: TForm1
     Top = 41
     Width = 572
     Height = 296
-    ActivePage = TabSheet1
+    ActivePage = WirelessNetworksTabSheet
     Align = alClient
     TabOrder = 1
-    object TabSheet1: TTabSheet
-      Caption = 'Bezdr'#225'tov'#233' s'#237't'#283
+    object WirelessNetworksTabSheet: TTabSheet
+      Caption = 'Wireless networks'
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -62,25 +62,26 @@ object Form1: TForm1
             Width = 75
           end
           item
-            Caption = 'Autentizace'
+            Caption = 'Authentication'
+            Width = 85
+          end
+          item
+            Caption = 'Encryption'
             Width = 75
           end
           item
-            Caption = #352'ifrov'#225'n'#237
-            Width = 75
-          end
-          item
-            Caption = 'Typ s'#237't'#283
+            Caption = 'Type'
             Width = 100
           end
           item
-            Caption = 'Vys'#237'la'#269#367
+            Caption = 'AP count'
+            Width = 60
           end
           item
-            Caption = 'Sign'#225'l'
+            Caption = 'Quality'
           end
           item
-            Caption = 'P'#345'ipojen'
+            Caption = 'Connected'
             Width = 75
           end>
         ReadOnly = True
@@ -103,7 +104,7 @@ object Form1: TForm1
           Top = 8
           Width = 89
           Height = 25
-          Caption = 'P'#345'ipojit'
+          Caption = 'Connect...'
           Enabled = False
           TabOrder = 0
           OnClick = NetworkConnectButtonClick
@@ -113,7 +114,7 @@ object Form1: TForm1
           Top = 4
           Width = 89
           Height = 25
-          Caption = 'Odpojit'
+          Caption = 'Disconnect'
           Enabled = False
           TabOrder = 1
           OnClick = Button2Click
@@ -121,7 +122,7 @@ object Form1: TForm1
       end
     end
     object ProfileSheet: TTabSheet
-      Caption = 'S'#237#357'ov'#233' profily'
+      Caption = 'Network profiles'
       ImageIndex = 1
       OnShow = ProfileSheetShow
       object ProfileMenuPanel: TPanel
@@ -136,7 +137,7 @@ object Form1: TForm1
           Top = 2
           Width = 89
           Height = 25
-          Caption = 'P'#345'ipojit'
+          Caption = 'Connect...'
           Enabled = False
           TabOrder = 0
           OnClick = NetworkConnectButtonClick
@@ -146,7 +147,7 @@ object Form1: TForm1
           Top = 2
           Width = 89
           Height = 25
-          Caption = 'Odstranit'
+          Caption = 'Delete'
           Enabled = False
           TabOrder = 1
           OnClick = ProfileDeleteButtonClick
@@ -188,7 +189,7 @@ object Form1: TForm1
       end
     end
     object HostedNetworkTabSheet: TTabSheet
-      Caption = 'S'#237#357' ad-hoc'
+      Caption = 'Ad-hoc network'
       ImageIndex = 2
       OnShow = HostedNetworkTabSheetShow
       object HostedNetworkLowerPanel: TPanel

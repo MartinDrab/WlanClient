@@ -9,11 +9,11 @@ Uses
   WlanBssEntry, WlanProfile, Vcl.OleCtrls, SHDocVw, Generics.Collections;
 
 Type
-  TForm1 = Class (TForm)
+  TMainWlanClientForm = Class (TForm)
     Panel1: TPanel;
     ComboBox1: TComboBox;
     PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
+    WirelessNetworksTabSheet: TTabSheet;
     ListView1: TListView;
     CardListTimer: TTimer;
     Panel2: TPanel;
@@ -83,7 +83,7 @@ Type
   end;
 
 Var
-  Form1: TForm1;
+  MainWlanClientForm: TMainWlanClientForm;
 
 Implementation
 
@@ -93,20 +93,20 @@ Uses
   APSelectionForm;
 
 
-Procedure TForm1.RefreshAll(Sender:TObject);
+Procedure TMainWlanClientForm.RefreshAll(Sender:TObject);
 begin
 RefreshNetworkCards(ComboBox1);
 RefreshNetworks(Nil);
 end;
 
-Function TForm1.BooleanToStr(X:Boolean):WideSTring;
+Function TMainWlanClientForm.BooleanToStr(X:Boolean):WideSTring;
 begin
 If X Then
   Result := 'Ano'
 Else Result := 'Ne';
 end;
 
-Procedure TForm1.RefreshNetworkCards(Sender: TObject);
+Procedure TMainWlanClientForm.RefreshNetworkCards(Sender: TObject);
 Var
  CardList : TObjectList<TWlanInterface>;
  Card : TWlanInterface;
@@ -159,7 +159,7 @@ If FWlanBus.EnumInterfaces(CardList) Then
 CardList.Free;
 end;
 
-Procedure TForm1.RefreshProfiles(AComboBox:TComboBox);
+Procedure TMainWlanClientForm.RefreshProfiles(AComboBox:TComboBox);
 Var
   tmpList2 : TObjectList<TWlanProfile>;
   tmpList : TObjectList<TWlanProfile>;
@@ -183,7 +183,7 @@ If ComboBox1.ItemIndex > -1 Then
   end;
 end;
 
-Procedure TForm1.RefreshNetworks(Sender: TObject);
+Procedure TMainWlanClientForm.RefreshNetworks(Sender: TObject);
 Var
   I : Integer;
   NetworkList : TObjectList<TWlanNetwork>;
@@ -246,7 +246,7 @@ If ComboBox1.ItemIndex > -1 Then
 Else ListView1.Clear;
 end;
 
-Procedure TForm1.NetworkConnectButtonClick(Sender: TObject);
+Procedure TMainWlanClientForm.NetworkConnectButtonClick(Sender: TObject);
 Var
   I : Integer;
   L : TListItem;
@@ -300,7 +300,7 @@ If (Assigned(N) Or Assigned(P)) Then
 CardListTimer.Enabled := True;
 end;
 
-Procedure TForm1.Button2Click(Sender: TObject);
+Procedure TMainWlanClientForm.Button2Click(Sender: TObject);
 Var
   L : TListItem;
   N : TWlanNetwork;
@@ -317,7 +317,7 @@ If Assigned(L) Then
 CardListTimer.Enabled := True;
 end;
 
-Procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+Procedure TMainWlanClientForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
 CardListTimer.Enabled := False;
 If Assigned(FProfileList) Then
@@ -330,7 +330,7 @@ If Assigned(FWlanClient) Then
   FreeAndNil(FWlanClient);
 end;
 
-Procedure TForm1.FormCreate(Sender: TObject);
+Procedure TMainWlanClientForm.FormCreate(Sender: TObject);
 Var
   I : Integer;
   CardList : TObjectList<TWlanInterface>;
@@ -361,7 +361,7 @@ RefreshNetworks(Nil);
 CardListTimer.Enabled := True;
 end;
 
-Procedure TForm1.HNApplyButtonClick(Sender: TObject);
+Procedure TMainWlanClientForm.HNApplyButtonClick(Sender: TObject);
 begin
 FHostedNetwork.SetConnectionSettings(HNSSIDEdit.Text, StrToInt(HNMaxPeersEdit.Text));
 FHostedNetwork.SetSecuritySettings(HNAuthenticationComboBox.ItemIndex, HNEncryptionComboBox.ItemIndex);
@@ -369,7 +369,7 @@ FHostedNetwork.SetPassword(HNPasswordEdit.Text, HNSavePasswordCheckBox.Checked);
 HostedNetworkTabSheetShow(Nil);
 end;
 
-procedure TForm1.HNEnableDisableButtonClick(Sender: TObject);
+procedure TMainWlanClientForm.HNEnableDisableButtonClick(Sender: TObject);
 begin
 If FHostedNetwork.Enabled Then
   begin
@@ -385,7 +385,7 @@ HNStartStopButton.Enabled := FHostedNetwork.Enabled;
 HostedNetworkTabSheetShow(Nil);
 end;
 
-Procedure TForm1.HNPeerListViewData(Sender: TObject; Item: TListItem);
+Procedure TMainWlanClientForm.HNPeerListViewData(Sender: TObject; Item: TListItem);
 Var
   peer : TWlanHostedNetworkPeer;
 begin
@@ -397,12 +397,12 @@ With Item Do
   end;
 end;
 
-Procedure TForm1.HNRefreshButtonClick(Sender: TObject);
+Procedure TMainWlanClientForm.HNRefreshButtonClick(Sender: TObject);
 begin
 FHostedNetwork.Refresh;
 end;
 
-Procedure TForm1.HNStartStopButtonClick(Sender: TObject);
+Procedure TMainWlanClientForm.HNStartStopButtonClick(Sender: TObject);
 begin
 If FHostedNetwork.Active Then
   begin
@@ -418,7 +418,7 @@ HNEnableDisableButton.Enabled := Not FHostedNetwork.Active;
 HostedNetworkTabSheetShow(Nil);
 end;
 
-Procedure TForm1.HostedNetworkTabSheetShow(Sender: TObject);
+Procedure TMainWlanClientForm.HostedNetworkTabSheetShow(Sender: TObject);
 begin
 HNPeerListView.Items.Count := 0;
 If Not Assigned(FHostedNetwork) Then
@@ -455,7 +455,7 @@ If FHostedNetwork.Active Then
   end;
 end;
 
-Procedure TForm1.ListView1Deletion(Sender: TObject; Item: TListItem);
+Procedure TMainWlanClientForm.ListView1Deletion(Sender: TObject; Item: TListItem);
 begin
 If Assigned(Item.Data) Then
   TWlanNetwork(Item.Data).Free;
@@ -463,7 +463,7 @@ If Assigned(Item.Data) Then
 Item.Data := Nil;
 end;
 
-Procedure TForm1.ListView1SelectItem(Sender: TObject; Item: TListItem;
+Procedure TMainWlanClientForm.ListView1SelectItem(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 
 Var
@@ -474,7 +474,7 @@ NetworkConnectButton.Enabled := (Selected) And (Not Net.Connected);
 Button2.Enabled := (Selected) And (Net.Connected);
 end;
 
-Procedure TForm1.ProfileDeleteButtonClick(Sender: TObject);
+Procedure TMainWlanClientForm.ProfileDeleteButtonClick(Sender: TObject);
 Var
   L : TListItem;
   profile : TWlanProfile;
@@ -488,7 +488,7 @@ If Assigned(L) Then
   end;
 end;
 
-Procedure TForm1.ProfileListViewData(Sender: TObject; Item: TListItem);
+Procedure TMainWlanClientForm.ProfileListViewData(Sender: TObject; Item: TListItem);
 Var
   typeStr : WideString;
   profile : TWlanProfile;
@@ -513,14 +513,14 @@ With Item Do
   end;
 end;
 
-Procedure TForm1.ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
+Procedure TMainWlanClientForm.ProfileListViewSelectItem(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
 ProfileConnectButton.Enabled := Assigned(Item);
 ProfileDeleteButton.Enabled := Assigned(Item);
 end;
 
-Procedure TForm1.ProfileSheetShow(Sender: TObject);
+Procedure TMainWlanClientForm.ProfileSheetShow(Sender: TObject);
 begin
 RefreshProfiles(ComboBox1);
 end;

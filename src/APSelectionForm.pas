@@ -9,7 +9,7 @@ Uses
   Generics.Collections;
 
 type
-  TForm2 = Class (TForm)
+  TConnectionSettingsForm = Class (TForm)
     ListView1: TListView;
     Panel1: TPanel;
     Button1: TButton;
@@ -42,7 +42,7 @@ Implementation
 
 {$R *.DFM}
 
-Procedure TForm2.Button1Click(Sender: TObject);
+Procedure TConnectionSettingsForm.Button1Click(Sender: TObject);
 Var
   L : TListItem;
   I : Integer;
@@ -67,7 +67,7 @@ FHiddenNetwork := HiddenNetworkCheckBox.Checked;
 Close;
 end;
 
-Constructor TForm2.Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile; ACard:TWlanInterface);
+Constructor TConnectionSettingsForm.Create(AOwner:TComponent; ANetwork:TWlanNetwork; AProfile:TWlanProfile; ACard:TWlanInterface);
 begin
 FNetwork := ANetwork;
 FProfile := AProfile;
@@ -77,7 +77,7 @@ Inherited Create(AOwner);
 end;
 
 
-Procedure TForm2.FormCreate(Sender: TObject);
+Procedure TConnectionSettingsForm.FormCreate(Sender: TObject);
 Var
   I : Integer;
   List : TObjectList<TWlanBssEntry>;

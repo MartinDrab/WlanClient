@@ -101,7 +101,7 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="MainForm.pas">
-				<Form>Form1</Form>
+				<Form>MainWlanClientForm</Form>
 			</DCCReference>
 			<DCCReference Include="WLanAPI.pas"/>
 			<DCCReference Include="WlanAPIClient.pas"/>
@@ -109,7 +109,7 @@
 			<DCCReference Include="WlanNetwork.pas"/>
 			<DCCReference Include="WlanBssEntry.pas"/>
 			<DCCReference Include="APSelectionForm.pas">
-				<Form>Form2</Form>
+				<Form>ConnectionSettingsForm</Form>
 			</DCCReference>
 			<DCCReference Include="WlanBus.pas"/>
 			<DCCReference Include="WlanProfile.pas"/>

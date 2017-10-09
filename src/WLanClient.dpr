@@ -3,13 +3,13 @@ program WLanClient;
 uses
   Windows,
   Vcl.Forms,
-  MainForm in 'MainForm.pas' {Form1},
+  MainForm in 'MainForm.pas' {MainWlanClientForm},
   WLanAPI in 'WLanAPI.pas',
   WlanAPIClient in 'WlanAPIClient.pas',
   WlanInterface in 'WlanInterface.pas',
   WlanNetwork in 'WlanNetwork.pas',
   WlanBssEntry in 'WlanBssEntry.pas',
-  APSelectionForm in 'APSelectionForm.pas' {Form2},
+  APSelectionForm in 'APSelectionForm.pas' {ConnectionSettingsForm},
   WlanBus in 'WlanBus.pas',
   WlanProfile in 'WlanProfile.pas',
   WlanHostedNetwork in 'WlanHostedNetwork.pas';
@@ -26,7 +26,7 @@ If GetVersionExW(VersionInfo) Then
     begin
     Application.Initialize;
     Application.MainFormOnTaskbar := True;
-    Application.CreateForm(TForm1, Form1);
+    Application.CreateForm(TMainWlanClientForm, MainWlanClientForm);
   Application.Run;
     end
   Else MessageBox(0, 'Program nepodporuje vaši verzi operaèního systému', 'Chyba', MB_OK Or MB_ICONERROR);

@@ -1,8 +1,8 @@
-object Form2: TForm2
+object ConnectionSettingsForm: TConnectionSettingsForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
-  Caption = 'Vyberte vys'#237'la'#269'e'
+  Caption = 'Connection Settings'
   ClientHeight = 221
   ClientWidth = 531
   Color = clBtnFace
@@ -24,7 +24,7 @@ object Form2: TForm2
     Checkboxes = True
     Columns = <
       item
-        Caption = 'MAC adresa'
+        Caption = 'MAC address'
         Width = 125
       end
       item
@@ -32,19 +32,19 @@ object Form2: TForm2
         Caption = 'SSID'
       end
       item
-        Caption = 'V'#253'kon (dB)'
+        Caption = 'Power (dB)'
         Width = 75
       end
       item
-        Caption = 'Kvalita spojen'#237
+        Caption = 'Quality'
         Width = 95
       end
       item
-        Caption = 'Frekvence'
+        Caption = 'Frequency'
         Width = 80
       end
       item
-        Caption = 'Kan'#225'l'
+        Caption = 'Channel'
         Width = 75
       end>
     ReadOnly = True
@@ -64,7 +64,7 @@ object Form2: TForm2
       Top = 30
       Width = 65
       Height = 25
-      Caption = 'P'#345'ipojit'
+      Caption = 'Connect'
       TabOrder = 0
       OnClick = Button1Click
     end
@@ -73,7 +73,7 @@ object Form2: TForm2
       Top = 6
       Width = 89
       Height = 17
-      Caption = 'Vytvo'#345'it profil'
+      Caption = 'Create profile'
       Enabled = False
       TabOrder = 1
     end
@@ -82,7 +82,7 @@ object Form2: TForm2
       Top = 6
       Width = 130
       Height = 17
-      Caption = 'P'#345'ipojovat automaticky'
+      Caption = 'Auto connect'
       Enabled = False
       TabOrder = 2
     end
@@ -91,7 +91,7 @@ object Form2: TForm2
       Top = 6
       Width = 97
       Height = 17
-      Caption = 'Skryt'#225' s'#237#357
+      Caption = 'Hidden network'
       Enabled = False
       TabOrder = 3
     end
