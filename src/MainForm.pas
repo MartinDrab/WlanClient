@@ -280,7 +280,7 @@ Else If Sender = ProfileConnectButton Then
 
 If (Assigned(N) Or Assigned(P)) Then
   begin
-  With TForm2.Create(Application, N, P, C) Do
+  With TConnectionSettingsForm.Create(Application, N, P, C) Do
     begin
     ShowModal;
     If Not Cancelled Then

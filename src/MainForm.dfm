@@ -50,6 +50,10 @@ object MainWlanClientForm: TMainWlanClientForm
     TabOrder = 1
     object WirelessNetworksTabSheet: TTabSheet
       Caption = 'Wireless networks'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -125,6 +129,10 @@ object MainWlanClientForm: TMainWlanClientForm
       Caption = 'Network profiles'
       ImageIndex = 1
       OnShow = ProfileSheetShow
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -192,6 +200,10 @@ object MainWlanClientForm: TMainWlanClientForm
       Caption = 'Ad-hoc network'
       ImageIndex = 2
       OnShow = HostedNetworkTabSheetShow
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object HostedNetworkLowerPanel: TPanel
         Left = 0
         Top = 33

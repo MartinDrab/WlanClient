@@ -36,6 +36,7 @@ Type
       Function _WlanHostedNetworkSetProperty(OpCode:WLAN_HOSTED_NETWORK_OPCODE; DataSize:Cardinal; Data:Pointer):Boolean;
       Function _WlanHostedNetworkQuerySecondaryKey(Var KeyLength:Cardinal; Var KeyData:PAnsiChar; Var IsPassPhrase:LongBool; Var Persistent:LongBool):Boolean;
       Function _WlanHostedNetworkSetSecondaryKey(KeyLength:Cardinal; KeyData:PAnsiChar; IsPassPhrase:LongBool; Persistent:LongBool):Boolean;
+      Function _WlanQueryInterface(InterfaceGuid:PGuid; OpCode:WLAN_INTF_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
 
       Property Error : LONG Read FError;
       Property FailureReason : WLAN_HOSTED_NETWORK_REASON Read FFailureReason;
@@ -211,6 +212,11 @@ FError := WlanHostedNetworkSetSecondaryKey(FHandle, KeyLength, KeyData, IsPassPh
 Result := FError = ERROR_SUCCESS;
 end;
 
+Function TWlanAPICLient._WlanQueryInterface(InterfaceGuid:PGuid; OpCode:WLAN_INTF_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
+begin
+FError := WlanQueryInterface(FHandle, InterfaceGuid, OpCode, Nil, DataSize, Data, ValueType);
+Result := FError = ERROR_SUCCESS;
+end;
 
 
 End.
