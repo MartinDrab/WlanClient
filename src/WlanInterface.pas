@@ -27,6 +27,7 @@ Type
       Function NetworkBySSID(ASSID:WideString):TWlanNetwork;
       Function Connect(AParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
       Function Disconnect:Boolean;
+      Function Query(OpCode:WLAN_INTF_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
 
       Property Guid : TGUID Read FGuid;
       Property Description : WideString Read FDescription;
@@ -165,6 +166,11 @@ If EnumNetworks(L) Then
   end;
 
 L.Free;
+end;
+
+Function TWlanInterface.Query(OpCode:WLAN_INTF_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
+begin
+Result := FCLient._WlanQueryInterface(@FGuid, OpCode, DataSize, Data, ValueType);
 end;
 
 
