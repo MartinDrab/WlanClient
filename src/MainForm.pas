@@ -73,11 +73,18 @@ Type
     procedure HNStartStopButtonClick(Sender: TObject);
     procedure HNApplyButtonClick(Sender: TObject);
     procedure HNPeerListViewData(Sender: TObject; Item: TListItem);
+    procedure ListView1AdvancedCustomDrawItem(Sender: TCustomListView;
+      Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
+      var DefaultDraw: Boolean);
+    procedure ProfileListViewAdvancedCustomDrawItem(Sender: TCustomListView;
+      Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
+      var DefaultDraw: Boolean);
   Private
     FHostedNetwork : TWlanHostedNetwork;
     FWlanClient : TWlanAPICLient;
     FWlanBus : TWlanBus;
     FProfileList : TObjectList<TWlanProfile>;
+    FInterfaceInfo : TWlanInterfaceInfo;
     Function BooleanToStr(X:Boolean):WideSTring;
     Procedure RefreshProfiles(AComboBox:TComboBox);
   end;
@@ -102,8 +109,8 @@ end;
 Function TMainWlanClientForm.BooleanToStr(X:Boolean):WideSTring;
 begin
 If X Then
-  Result := 'Ano'
-Else Result := 'Ne';
+  Result := 'Yes'
+Else Result := 'No';
 end;
 
 Procedure TMainWlanClientForm.RefreshNetworkCards(Sender: TObject);
@@ -154,6 +161,11 @@ If FWlanBus.EnumInterfaces(CardList) Then
     ComboBox1.ItemIndex := 0;
 
   ComboBox1.Invalidate;
+  If ComboBox1.Items.Count > 0 Then
+    begin
+    Card := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
+    Card.QueryConnectionInfo(FInterfaceInfo);
+    end;
   end;
 
 CardList.Free;
@@ -455,6 +467,18 @@ If FHostedNetwork.Active Then
   end;
 end;
 
+procedure TMainWlanClientForm.ListView1AdvancedCustomDrawItem(
+  Sender: TCustomListView; Item: TListItem; State: TCustomDrawState;
+  Stage: TCustomDrawStage; var DefaultDraw: Boolean);
+Var
+  N : TWlanNetwork;
+begin
+N := Item.Data;
+If N.SSID = FInterfaceInfo.SSID Then
+  Sender.Canvas.Font.Style := [fsBold]
+Else Sender.Canvas.Font.Style := [];
+end;
+
 Procedure TMainWlanClientForm.ListView1Deletion(Sender: TObject; Item: TListItem);
 begin
 If Assigned(Item.Data) Then
@@ -486,6 +510,18 @@ If Assigned(L) Then
   profile.Delete;
   RefreshProfiles(ComboBox1);
   end;
+end;
+
+Procedure TMainWlanClientForm.ProfileListViewAdvancedCustomDrawItem(
+  Sender: TCustomListView; Item: TListItem; State: TCustomDrawState;
+  Stage: TCustomDrawStage; var DefaultDraw: Boolean);
+Var
+  P : TWlanProfile;
+begin
+P := FProfileList[Item.Index];
+If P.Name = FInterfaceInfo.ProfileName Then
+  Sender.Canvas.Font.Style := [fsBold]
+Else Sender.Canvas.Font.Style := [];
 end;
 
 Procedure TMainWlanClientForm.ProfileListViewData(Sender: TObject; Item: TListItem);
