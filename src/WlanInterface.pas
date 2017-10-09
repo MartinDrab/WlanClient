@@ -12,6 +12,20 @@ Type
     wisDisconnecting, wisDisconnected, wisAssociating,
     wisDiscovering, wisAuthenticationg);
 
+  TWlanInterfaceInfo = Record
+    State : WLAN_INTERFACE_STATE;
+    ConnectionMode : WLAN_CONNECTION_MODE;
+    ProfileName : WideString;
+    SSID : WideString;
+    MACAddress : DOT11_MAC_ADDRESS;
+    AuthAlog : Cardinal;
+    CipherAlgo : Cardinal;
+    RxRate : Cardinal;
+    TxRate : Cardinal;
+    Channel : Cardinal;
+    end;
+  PWlanInterfaceInfo = ^TWlanInterfaceInfo;
+
   TWlanInterface = Class
     Private
       FGuid : TGUID;
@@ -28,6 +42,7 @@ Type
       Function Connect(AParameters:PWLAN_CONNECTION_PARAMETERS):Boolean;
       Function Disconnect:Boolean;
       Function Query(OpCode:WLAN_INTF_OPCODE; Var DataSize:Cardinal; Var Data:Pointer; Var ValueType:WLAN_OPCODE_VALUE_TYPE):Boolean;
+      Function QueryConnectionInfo(Var AInfo:TWlanInterfaceInfo):Boolean;
 
       Property Guid : TGUID Read FGuid;
       Property Description : WideString Read FDescription;
@@ -36,6 +51,8 @@ Type
 
 Implementation
 
+Uses
+  SysUtils;
 
 Class Function TWlanInterface.NewInstance(AClient:TWlanAPIClient; ARecord:PWLAN_INTERFACE_INFO_LIST):TWlanInterface;
 begin
@@ -173,6 +190,41 @@ begin
 Result := FCLient._WlanQueryInterface(@FGuid, OpCode, DataSize, Data, ValueType);
 end;
 
+Function TWlanInterface.QueryConnectionInfo(Var AInfo:TWlanInterfaceInfo):Boolean;
+Var
+  I : Integer;
+  ChannelNumber : PCardinal;
+  caSize : Cardinal;
+  ca : PWLAN_CONNECTION_ATTRIBUTES;
+  vt : WLAN_OPCODE_VALUE_TYPE;
+begin
+ca := Nil;
+caSize := 0;
+Result := Query(wlan_intf_opcode_current_connection, caSize, Pointer(ca), vt);
+If Result Then
+  begin
+  AInfo.State := ca.State;
+  AInfo.ConnectionMode := ca.ConnectionMode;
+  AInfo.ProfileName := Copy(PWideChar(@ca.ProfileName), 1, StrLen(ca.ProfileName));
+  SetLength(AInfo.SSID, ca.AssociationAttributes.SSID.uSSIDLength);
+  For I := 0 To ca.AssociationAttributes.SSID.uSSIDLength - 1 Do
+    AInfo.SSID[I + 1] := WideChar(ca.AssociationAttributes.SSID.ucSSID[I]);
+
+  AInfo.MACAddress := ca.AssociationAttributes.MACAddress;
+  AInfo.AuthAlog := ca.SecurityAttributes.AuthAlgorithm;
+  AInfo.CipherAlgo := ca.SecurityAttributes.CipherAlgorithm;
+  AInfo.RxRate := ca.AssociationAttributes.RxRate;
+  AInfo.TxRate := ca.AssociationAttributes.TxRate;
+  WlanFreeMemory(ca);
+  ChannelNumber := Nil;
+  Result := Query(wlan_intf_opcode_channel_number, caSize, Pointer(ChannelNumber), vt);
+  If Result Then
+    begin
+    AInfo.Channel := ChannelNumber^;
+    WlanFreeMemory(ChannelNumber);
+    end;
+  end;
+end;
 
 End.
 
