@@ -80,6 +80,7 @@ Type
       Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
       var DefaultDraw: Boolean);
   Private
+    FCurrentCard : TWlanInterface;
     FHostedNetwork : TWlanHostedNetwork;
     FWlanClient : TWlanAPICLient;
     FWlanBus : TWlanBus;
@@ -116,7 +117,6 @@ end;
 Procedure TMainWlanClientForm.RefreshNetworkCards(Sender: TObject);
 Var
  CardList : TObjectList<TWlanInterface>;
- Card : TWlanInterface;
  Ret : Boolean;
  I : Integer;
  ItemGuid : TGUID;
@@ -129,29 +129,29 @@ If FWlanBus.EnumInterfaces(CardList) Then
   SelectedSurvived := False;
   If ComboBox1.ItemIndex > -1 Then
     begin
-    Card := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
-    ItemGuid := Card.Guid;
-    LastState := Card.State;
+    FCurrentCard := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
+    ItemGuid := FCurrentCard.Guid;
+    LastState := FCurrentCard.State;
     end;
 
   For I := 0 To CardList.Count - 1 Do
     begin
-    Card := CardList[I];
+    FCurrentCard := CardList[I];
     If I < ComboBox1.Items.Count Then
       begin
-      ComboBox1.Items.Strings[I] := Format('%s (%s)', [Card.Description, TWlanInterface.StateToStr(Card.State)]);
+      ComboBox1.Items.Strings[I] := Format('%s (%s)', [FCurrentCard.Description, TWlanInterface.StateToStr(FCurrentCard.State)]);
       ComboBox1.Items.Objects[I].Free;
-      ComboBox1.Items.Objects[I] := Card;
-      If ItemGuid = Card.Guid Then
+      ComboBox1.Items.Objects[I] := FCurrentCard;
+      If ItemGuid = FCurrentCard.Guid Then
         begin
         SelectedSurvived := True;
         ComboBox1.ItemIndex := I;
         end;
 
-      If Card.State <> LastState Then
+      If FCurrentCard.State <> LastState Then
         RefreshNetworks(Nil);
       end
-    Else ComboBox1.AddItem(Format('%s (%s)', [Card.Description, TWlanInterface.StateToStr(Card.State)]), Card);
+    Else ComboBox1.AddItem(Format('%s (%s)', [FCurrentCard.Description, TWlanInterface.StateToStr(FCurrentCard.State)]), FCurrentCard);
     end;
 
   While ComboBox1.Items.Count > CardList.Count Do
@@ -161,10 +161,11 @@ If FWlanBus.EnumInterfaces(CardList) Then
     ComboBox1.ItemIndex := 0;
 
   ComboBox1.Invalidate;
+  FCurrentCard := Nil;
   If ComboBox1.Items.Count > 0 Then
     begin
-    Card := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
-    Card.QueryConnectionInfo(FInterfaceInfo);
+    FCurrentCard := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
+    FCurrentCard.QueryConnectionInfo(FInterfaceInfo);
     end;
   end;
 
@@ -175,87 +176,75 @@ Procedure TMainWlanClientForm.RefreshProfiles(AComboBox:TComboBox);
 Var
   tmpList2 : TObjectList<TWlanProfile>;
   tmpList : TObjectList<TWlanProfile>;
-  wlanInterface : TWlanInterface;
 begin
-If ComboBox1.ItemIndex > -1 Then
+tmpList := TObjectList<TWlanProfile>.Create;
+If FCurrentCard.EnumProfiles(tmpList) Then
   begin
-  WlanInterface := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
-  tmpList := TObjectList<TWlanProfile>.Create;
-  If wlanInterface.EnumProfiles(tmpList) Then
-    begin
-    ProfileListView.Items.Count := 0;
-    tmpList2 := FProfileList;
-    FProfileList := tmpList;
-    tmpList := tmpList2;
-    ProfileListView.Items.Count := FProfileList.Count;
-    end;
-
-  If Assigned(tmpList) Then
-    tmpList.Free;
+  ProfileListView.Items.Count := 0;
+  tmpList2 := FProfileList;
+  FProfileList := tmpList;
+  tmpList := tmpList2;
+  ProfileListView.Items.Count := FProfileList.Count;
   end;
+
+If Assigned(tmpList) Then
+  tmpList.Free;
 end;
 
 Procedure TMainWlanClientForm.RefreshNetworks(Sender: TObject);
 Var
   I : Integer;
   NetworkList : TObjectList<TWlanNetwork>;
-  WlanInterface : TWlanInterface;
   WlanNetwork : TWlanNetwork;
   L : TListItem;
 begin
-If ComboBox1.ItemIndex > -1 Then
+NetworkList := TObjectList<TWlanNetwork>.Create(False);
+If FCurrentCard.EnumNetworks(NetworkList) Then
   begin
-  WlanInterface := TWlanInterface(ComboBox1.Items.Objects[ComboBox1.ItemIndex]);
-  NetworkList := TObjectList<TWlanNetwork>.Create(False);
-  If WlanInterface.EnumNetworks(NetworkList) Then
+  ListView1.Items.BeginUpdate;
+  For I := 0 To NetworkList.Count - 1 Do
     begin
-    ListView1.Items.BeginUpdate;
-    For I := 0 To NetworkList.Count - 1 Do
+    WlanNetwork := NetworkList[I];
+    If I < ListView1.Items.Count Then
       begin
-      WlanNetwork := NetworkList[I];
-      If I < ListView1.Items.Count Then
+      L := ListVIew1.Items[I];
+      With L Do
         begin
-        L := ListVIew1.Items[I];
-        With L Do
-          begin
-          TWlanNetwork(Data).Free;
-          Data := WlanNetwork;
-          Caption := WlanNetwork.SSID;
-          SubItems[0] := TWlanNetwork.AuthAlgoToStr(WlanNetwork.AuthenticationAlgo);
-          SubItems[1] := TWlanNetwork.CipherAlgoToSTr(WLanNetwork.CipherAlgo);
-          SubItems[2] := TWlanNetwork.BSSTypeToSTr(WlanNetwork.BSSType);
-          SubItems[3] := Format('%d', [WlanNetwork.NumberOfBSSIDs]);
-          SubItems[4] := Format('%d %%', [WlanNetwork.SignalQuality]);
-          SubItems[5] := BooleanToStr(WlanNetwork.Connected);
-          end;
-        end
-      Else begin
-        L := ListView1.Items.Add;
-        With L Do
-          begin
-          Data := WlanNetwork;
-          Caption := WlanNetwork.SSID;
-          SubItems.Add(TWlanNetwork.AuthAlgoToStr(WlanNetwork.AuthenticationAlgo));
-          SubItems.Add(TWlanNetwork.CipherAlgoToSTr(WLanNetwork.CipherAlgo));
-          SubItems.Add(TWlanNetwork.BSSTypeToSTr(WlanNetwork.BSSType));
-          SubItems.Add(Format('%d', [WlanNetwork.NumberOfBSSIDs]));
-          SubItems.Add(Format('%d %%', [WlanNetwork.SignalQuality]));
-          SubItems.Add(BooleanToStr(WlanNetwork.Connected));
-          end;
+        TWlanNetwork(Data).Free;
+        Data := WlanNetwork;
+        Caption := WlanNetwork.SSID;
+        SubItems[0] := TWlanNetwork.AuthAlgoToStr(WlanNetwork.AuthenticationAlgo);
+        SubItems[1] := TWlanNetwork.CipherAlgoToSTr(WLanNetwork.CipherAlgo);
+        SubItems[2] := TWlanNetwork.BSSTypeToSTr(WlanNetwork.BSSType);
+        SubItems[3] := Format('%d', [WlanNetwork.NumberOfBSSIDs]);
+        SubItems[4] := Format('%d %%', [WlanNetwork.SignalQuality]);
+        SubItems[5] := BooleanToStr(WlanNetwork.Connected);
         end;
-
+      end
+    Else begin
+      L := ListView1.Items.Add;
+      With L Do
+        begin
+        Data := WlanNetwork;
+        Caption := WlanNetwork.SSID;
+        SubItems.Add(TWlanNetwork.AuthAlgoToStr(WlanNetwork.AuthenticationAlgo));
+        SubItems.Add(TWlanNetwork.CipherAlgoToSTr(WLanNetwork.CipherAlgo));
+        SubItems.Add(TWlanNetwork.BSSTypeToSTr(WlanNetwork.BSSType));
+        SubItems.Add(Format('%d', [WlanNetwork.NumberOfBSSIDs]));
+        SubItems.Add(Format('%d %%', [WlanNetwork.SignalQuality]));
+        SubItems.Add(BooleanToStr(WlanNetwork.Connected));
+        end;
       end;
+    end;
 
-    While ListView1.Items.Count > NetworkList.Count Do
-      ListView1.Items.Delete(ListView1.Items.Count - 1);
+  While ListView1.Items.Count > NetworkList.Count Do
+    ListView1.Items.Delete(ListView1.Items.Count - 1);
 
-    ListView1.Items.EndUpdate;
-    end
-  Else ListView1.Clear;
-
-  NetworkList.Free;
+  ListView1.Items.EndUpdate;
   end
 Else ListView1.Clear;
+
+NetworkList.Free;
 end;
 
 Procedure TMainWlanClientForm.NetworkConnectButtonClick(Sender: TObject);
@@ -361,16 +350,20 @@ If Not FWlanBus.EnumInterfaces(CardList) Then
   Raise Exception.Create('Nepodaøilo se získat seznam dostupných síových karet');
   end;
 
-For I := 0 To CardList.Count - 1 Do
+If CardList.Count > 0 Then
   begin
-  Tmp := CardList[I];
-  ComboBox1.AddItem(Format('%s (%s)', [Tmp.Description, TWlanInterface.StateToStr(Tmp.State)]), Tmp);
-  end;
+  For I := 0 To CardList.Count - 1 Do
+    begin
+    Tmp := CardList[I];
+    ComboBox1.AddItem(Format('%s (%s)', [Tmp.Description, TWlanInterface.StateToStr(Tmp.State)]), Tmp);
+    end;
 
-CardList.Free;
-ComboBox1.ItemIndex := 0;
-RefreshNetworks(Nil);
-CardListTimer.Enabled := True;
+  CardList.Free;
+  ComboBox1.ItemIndex := 0;
+  FCurrentCard := ComboBox1.Items.Objects[COmbobox1.ItemIndex] As TWlanInterface;
+  RefreshNetworks(Nil);
+  CardListTimer.Enabled := True;
+  end;
 end;
 
 Procedure TMainWlanClientForm.HNApplyButtonClick(Sender: TObject);
