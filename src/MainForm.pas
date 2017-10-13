@@ -486,16 +486,19 @@ Procedure TMainWlanClientForm.InterfaceInfoSheetShow(Sender: TObject);
 begin
 If Assigned(FCurrentCard) Then
   begin
-  InterfaceNameEdit.Text := FCurrentCard.Description;
-  InterfaceGuidEdit.Text := GUIDToString(FCurrentCard.Guid);
-  InterfaceStateEdit.Text := TWlanInterface.StateToStr(FInterfaceInfo.State);
-  InterfaceSSIDEdit.Text := FInterfaceInfo.SSID;
-  InterfaceProfileEdit.Text := FInterfaceInfo.ProfileName;
-  InterfaceAuthEdit.Text := TWlanNetwork.AuthAlgoToStr(TWlanNetworkAuthAlgorithm(FInterfaceInfo.AuthAlog));
-  InterfaceEncryptionEdit.Text := TWlanNetwork.CipherAlgoToSTr(FInterfaceInfo.CipherAlgo);
-  InterfaceMACEdit.Text := Format('%.2x-%.2x-%.2x-%.2x-%.2x-%.2x', [FInterfaceInfo.MACAddress[0], FInterfaceInfo.MACAddress[1], FInterfaceInfo.MACAddress[2], FInterfaceInfo.MACAddress[3], FInterfaceInfo.MACAddress[4], FInterfaceInfo.MACAddress[5]]);
-  InterfaceChannelEdit.Text := Format('%d', [FInterfaceInfo.Channel]);
-  InterfaceModeEdit.Text := TWlanInterface.ConnectonModeToStr(FInterfaceInfo.ConnectionMode);
+  If FCurrentCard.QueryConnectionInfo(FInterfaceInfo) Then
+    begin
+    InterfaceNameEdit.Text := FCurrentCard.Description;
+    InterfaceGuidEdit.Text := GUIDToString(FCurrentCard.Guid);
+    InterfaceStateEdit.Text := TWlanInterface.StateToStr(FInterfaceInfo.State);
+    InterfaceSSIDEdit.Text := FInterfaceInfo.SSID;
+    InterfaceProfileEdit.Text := FInterfaceInfo.ProfileName;
+    InterfaceAuthEdit.Text := TWlanNetwork.AuthAlgoToStr(TWlanNetworkAuthAlgorithm(FInterfaceInfo.AuthAlog));
+    InterfaceEncryptionEdit.Text := TWlanNetwork.CipherAlgoToSTr(FInterfaceInfo.CipherAlgo);
+    InterfaceMACEdit.Text := Format('%.2x-%.2x-%.2x-%.2x-%.2x-%.2x', [FInterfaceInfo.MACAddress[0], FInterfaceInfo.MACAddress[1], FInterfaceInfo.MACAddress[2], FInterfaceInfo.MACAddress[3], FInterfaceInfo.MACAddress[4], FInterfaceInfo.MACAddress[5]]);
+    InterfaceChannelEdit.Text := Format('%d', [FInterfaceInfo.Channel]);
+    InterfaceModeEdit.Text := TWlanInterface.ConnectonModeToStr(FInterfaceInfo.ConnectionMode);
+    end;
   end;
 end;
 
