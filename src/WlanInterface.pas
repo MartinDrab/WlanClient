@@ -74,14 +74,14 @@ end;
 Class Function TWlanInterface.StateToStr(AState:TWlanInterfaceState):WideString;
 begin
 Case AState Of
-  wisNotReady : Result := 'nepøipravena';
-  wisConnected : Result := 'pøipojena';
-  wisAdhocFormed : Result := 'sí ad-hoc';
-  wisDisconnecting : Result := 'odpojování';
-  wisDisconnected : Result := 'odpojena';
-  wisAssociating : Result := 'pøipojování';
-  wisDiscovering : Result := 'vyhledávání sítí';
-  wisAuthenticationg : Result := 'autentizace';
+  wisNotReady : Result := 'Not ready';
+  wisConnected : Result := 'Connected';
+  wisAdhocFormed : Result := 'Ad-hoc network';
+  wisDisconnecting : Result := 'disconnecting';
+  wisDisconnected : Result := 'Disconnected';
+  wisAssociating : Result := 'Connecting';
+  wisDiscovering : Result := 'Discovering';
+  wisAuthenticationg : Result := 'Authenticating';
   end;
 end;
 
