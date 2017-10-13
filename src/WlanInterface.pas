@@ -13,7 +13,7 @@ Type
     wisDiscovering, wisAuthenticationg);
 
   TWlanInterfaceInfo = Record
-    State : WLAN_INTERFACE_STATE;
+    State : TWlanInterfaceState;
     ConnectionMode : WLAN_CONNECTION_MODE;
     ProfileName : WideString;
     SSID : WideString;
@@ -35,6 +35,7 @@ Type
     Public
       Class Function NewInstance(AClient:TWlanAPIClient; ARecord:PWLAN_INTERFACE_INFO_LIST):TWlanInterface;
       Class Function StateToStr(AState:TWlanInterfaceState):WideString;
+      Class Function ConnectonModeToStr(AMode:WLAN_CONNECTION_MODE):WideString;
 
       Function EnumNetworks(AList:TObjectList<TWlanNetwork>):Boolean;
       Function EnumProfiles(AList:TObjectList<TWlanProfile>):Boolean;
@@ -81,6 +82,19 @@ Case AState Of
   wisAssociating : Result := 'pøipojování';
   wisDiscovering : Result := 'vyhledávání sítí';
   wisAuthenticationg : Result := 'autentizace';
+  end;
+end;
+
+Class Function TWlanInterface.ConnectonModeToStr(AMode:WLAN_CONNECTION_MODE):WideString;
+begin
+Case AMode Of
+  wlan_connection_mode_profile: ;
+  wlan_connection_mode_temporary_profile: Result := 'Profile';
+  wlan_connection_mode_discovery_secure: Result := 'Secure discovery';
+  wlan_connection_mode_discovery_unsecure: Result := 'Unsecure discovery';
+  wlan_connection_mode_auto: Result := 'Automatic';
+  wlan_connection_mode_invalid: Result := 'Invalid';
+  Else Result := Format('<unknown> (%d)', [Ord(AMode)]);
   end;
 end;
 
@@ -203,7 +217,7 @@ caSize := 0;
 Result := Query(wlan_intf_opcode_current_connection, caSize, Pointer(ca), vt);
 If Result Then
   begin
-  AInfo.State := ca.State;
+  AInfo.State := TWlanInterfaceState(ca.State);
   AInfo.ConnectionMode := ca.ConnectionMode;
   AInfo.ProfileName := Copy(PWideChar(@ca.ProfileName), 1, StrLen(ca.ProfileName));
   SetLength(AInfo.SSID, ca.AssociationAttributes.SSID.uSSIDLength);

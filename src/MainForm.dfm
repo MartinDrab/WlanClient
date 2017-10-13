@@ -3,7 +3,7 @@ object MainWlanClientForm: TMainWlanClientForm
   Top = 0
   BorderIcons = [biSystemMenu]
   Caption = 'Wireless LAN Client'
-  ClientHeight = 337
+  ClientHeight = 360
   ClientWidth = 572
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -44,17 +44,151 @@ object MainWlanClientForm: TMainWlanClientForm
     Left = 0
     Top = 41
     Width = 572
-    Height = 296
-    ActivePage = WirelessNetworksTabSheet
+    Height = 319
+    ActivePage = InterfaceInfoSheet
     Align = alClient
     TabOrder = 1
+    ExplicitHeight = 296
+    object InterfaceInfoSheet: TTabSheet
+      Caption = 'Wireless interface'
+      ImageIndex = 3
+      OnShow = InterfaceInfoSheetShow
+      ExplicitHeight = 297
+      object Label11: TLabel
+        Left = 40
+        Top = 11
+        Width = 27
+        Height = 13
+        Caption = 'Name'
+      end
+      object Label12: TLabel
+        Left = 40
+        Top = 38
+        Width = 25
+        Height = 13
+        Caption = 'GUID'
+      end
+      object Label13: TLabel
+        Left = 40
+        Top = 67
+        Width = 26
+        Height = 13
+        Caption = 'State'
+      end
+      object Label14: TLabel
+        Left = 40
+        Top = 94
+        Width = 26
+        Height = 13
+        Caption = 'Mode'
+      end
+      object Label15: TLabel
+        Left = 40
+        Top = 121
+        Width = 25
+        Height = 13
+        Caption = 'MAC '
+      end
+      object Label16: TLabel
+        Left = 40
+        Top = 145
+        Width = 30
+        Height = 13
+        Caption = 'Profile'
+      end
+      object Label17: TLabel
+        Left = 40
+        Top = 175
+        Width = 23
+        Height = 13
+        Caption = 'SSID'
+      end
+      object Label18: TLabel
+        Left = 40
+        Top = 202
+        Width = 23
+        Height = 13
+        Caption = 'Auth'
+      end
+      object Label19: TLabel
+        Left = 43
+        Top = 234
+        Width = 51
+        Height = 13
+        Caption = 'Encryption'
+      end
+      object Label20: TLabel
+        Left = 40
+        Top = 266
+        Width = 39
+        Height = 13
+        Caption = 'Channel'
+      end
+      object InterfaceNameEdit: TEdit
+        Left = 96
+        Top = 8
+        Width = 225
+        Height = 21
+        TabOrder = 0
+      end
+      object InterfaceGuidEdit: TEdit
+        Left = 96
+        Top = 35
+        Width = 225
+        Height = 21
+        TabOrder = 1
+      end
+      object InterfaceMACEdit: TEdit
+        Left = 96
+        Top = 118
+        Width = 225
+        Height = 21
+        TabOrder = 2
+      end
+      object InterfaceProfileEdit: TEdit
+        Left = 96
+        Top = 145
+        Width = 225
+        Height = 21
+        TabOrder = 3
+      end
+      object InterfaceSSIDEdit: TEdit
+        Left = 96
+        Top = 172
+        Width = 225
+        Height = 21
+        TabOrder = 4
+      end
+      object InterfaceChannelEdit: TEdit
+        Left = 96
+        Top = 253
+        Width = 225
+        Height = 21
+        TabOrder = 5
+      end
+      object InterfaceAuthEdit: TEdit
+        Left = 96
+        Top = 199
+        Width = 225
+        Height = 21
+        TabOrder = 6
+      end
+      object InterfaceEncryptionEdit: TEdit
+        Left = 96
+        Top = 226
+        Width = 225
+        Height = 21
+        TabOrder = 7
+      end
+    end
     object WirelessNetworksTabSheet: TTabSheet
       Caption = 'Wireless networks'
+      ExplicitHeight = 268
       object ListView1: TListView
         Left = 0
         Top = 35
         Width = 564
-        Height = 233
+        Height = 256
         Align = alClient
         Columns = <
           item
@@ -92,6 +226,7 @@ object MainWlanClientForm: TMainWlanClientForm
         OnAdvancedCustomDrawItem = ListView1AdvancedCustomDrawItem
         OnDeletion = ListView1Deletion
         OnSelectItem = ListView1SelectItem
+        ExplicitHeight = 233
       end
       object Panel2: TPanel
         Left = 0
@@ -126,6 +261,7 @@ object MainWlanClientForm: TMainWlanClientForm
       Caption = 'Network profiles'
       ImageIndex = 1
       OnShow = ProfileSheetShow
+      ExplicitHeight = 268
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -158,7 +294,7 @@ object MainWlanClientForm: TMainWlanClientForm
         Left = 0
         Top = 33
         Width = 564
-        Height = 235
+        Height = 258
         Align = alClient
         Columns = <
           item
@@ -188,19 +324,22 @@ object MainWlanClientForm: TMainWlanClientForm
         OnAdvancedCustomDrawItem = ProfileListViewAdvancedCustomDrawItem
         OnData = ProfileListViewData
         OnSelectItem = ProfileListViewSelectItem
+        ExplicitHeight = 235
       end
     end
     object HostedNetworkTabSheet: TTabSheet
       Caption = 'Ad-hoc network'
       ImageIndex = 2
       OnShow = HostedNetworkTabSheetShow
+      ExplicitHeight = 268
       object HostedNetworkLowerPanel: TPanel
         Left = 0
         Top = 33
         Width = 564
-        Height = 235
+        Height = 258
         Align = alClient
         TabOrder = 0
+        ExplicitHeight = 235
         object Label2: TLabel
           Left = 8
           Top = 9
@@ -422,10 +561,24 @@ object MainWlanClientForm: TMainWlanClientForm
       end
     end
   end
+  object InterfaceStateEdit: TEdit
+    Left = 100
+    Top = 129
+    Width = 225
+    Height = 21
+    TabOrder = 2
+  end
+  object InterfaceModeEdit: TEdit
+    Left = 100
+    Top = 156
+    Width = 225
+    Height = 21
+    TabOrder = 3
+  end
   object CardListTimer: TTimer
     Enabled = False
     OnTimer = RefreshAll
-    Left = 64
-    Top = 256
+    Left = 352
+    Top = 184
   end
 end

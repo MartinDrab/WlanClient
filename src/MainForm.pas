@@ -52,6 +52,27 @@ Type
     HNPeerCountEdit: TEdit;
     Label10: TLabel;
     HNPeerListView: TListView;
+    InterfaceInfoSheet: TTabSheet;
+    InterfaceNameEdit: TEdit;
+    InterfaceGuidEdit: TEdit;
+    InterfaceMACEdit: TEdit;
+    InterfaceProfileEdit: TEdit;
+    InterfaceSSIDEdit: TEdit;
+    InterfaceChannelEdit: TEdit;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    InterfaceAuthEdit: TEdit;
+    InterfaceEncryptionEdit: TEdit;
+    InterfaceStateEdit: TEdit;
+    InterfaceModeEdit: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure RefreshNetworks(Sender: TObject);
@@ -79,6 +100,7 @@ Type
     procedure ProfileListViewAdvancedCustomDrawItem(Sender: TCustomListView;
       Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
       var DefaultDraw: Boolean);
+    procedure InterfaceInfoSheetShow(Sender: TObject);
   Private
     FCurrentCard : TWlanInterface;
     FHostedNetwork : TWlanHostedNetwork;
@@ -457,6 +479,23 @@ If FHostedNetwork.Active Then
   HNFrequencyEdit.Text := Format('%d', [FHostedNetwork.Channel]);
   HNPeerCountEdit.Text := Format('%d', [FHostedNetwork.PeerCount]);
   HNPeerListView.Items.Count := FHostedNetwork.PeerCount;
+  end;
+end;
+
+Procedure TMainWlanClientForm.InterfaceInfoSheetShow(Sender: TObject);
+begin
+If Assigned(FCurrentCard) Then
+  begin
+  InterfaceNameEdit.Text := FCurrentCard.Description;
+  InterfaceGuidEdit.Text := GUIDToString(FCurrentCard.Guid);
+  InterfaceStateEdit.Text := TWlanInterface.StateToStr(FInterfaceInfo.State);
+  InterfaceSSIDEdit.Text := FInterfaceInfo.SSID;
+  InterfaceProfileEdit.Text := FInterfaceInfo.ProfileName;
+  InterfaceAuthEdit.Text := TWlanNetwork.AuthAlgoToStr(TWlanNetworkAuthAlgorithm(FInterfaceInfo.AuthAlog));
+  InterfaceEncryptionEdit.Text := TWlanNetwork.CipherAlgoToSTr(FInterfaceInfo.CipherAlgo);
+  InterfaceMACEdit.Text := Format('%.2x-%.2x-%.2x-%.2x-%.2x-%.2x', [FInterfaceInfo.MACAddress[0], FInterfaceInfo.MACAddress[1], FInterfaceInfo.MACAddress[2], FInterfaceInfo.MACAddress[3], FInterfaceInfo.MACAddress[4], FInterfaceInfo.MACAddress[5]]);
+  InterfaceChannelEdit.Text := Format('%d', [FInterfaceInfo.Channel]);
+  InterfaceModeEdit.Text := TWlanInterface.ConnectonModeToStr(FInterfaceInfo.ConnectionMode);
   end;
 end;
 
