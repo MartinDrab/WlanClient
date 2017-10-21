@@ -71,6 +71,7 @@ Type
     Label20: TLabel;
     InterfaceAuthEdit: TEdit;
     InterfaceEncryptionEdit: TEdit;
+    CopyXMLButton: TButton;
     InterfaceStateEdit: TEdit;
     InterfaceModeEdit: TEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -101,6 +102,7 @@ Type
       Item: TListItem; State: TCustomDrawState; Stage: TCustomDrawStage;
       var DefaultDraw: Boolean);
     procedure InterfaceInfoSheetShow(Sender: TObject);
+    procedure CopyXMLButtonClick(Sender: TObject);
   Private
     FCurrentCard : TWlanInterface;
     FHostedNetwork : TWlanHostedNetwork;
@@ -120,6 +122,8 @@ Implementation
 {$R *.DFM}
 
 Uses
+  ClipBrd,
+  Utils,
   APSelectionForm;
 
 
@@ -207,7 +211,8 @@ If FCurrentCard.EnumProfiles(tmpList) Then
   FProfileList := tmpList;
   tmpList := tmpList2;
   ProfileListView.Items.Count := FProfileList.Count;
-  end;
+  end
+Else ErrorMessage('Unable to enumerate network profiles: %s (%d)', [SysErrorMessage(FWlanClient.Error), FWlanCLient.Error]);
 
 If Assigned(tmpList) Then
   tmpList.Free;
@@ -338,6 +343,19 @@ If Assigned(L) Then
   end;
 
 CardListTimer.Enabled := True;
+end;
+
+Procedure TMainWlanClientForm.CopyXMLButtonClick(Sender: TObject);
+Var
+  L : TListItem;
+  p : TWlanProfile;
+begin
+L := ProfileListView.Selected;
+If Assigned(L) Then
+  begin
+  p := FProfileList[L.Index];
+  ClipBoard.AsText := p.XML;
+  end;
 end;
 
 Procedure TMainWlanClientForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -589,6 +607,7 @@ Procedure TMainWlanClientForm.ProfileListViewSelectItem(Sender: TObject; Item: T
 begin
 ProfileConnectButton.Enabled := Assigned(Item);
 ProfileDeleteButton.Enabled := Assigned(Item);
+CopyXMLButton.Enabled := Assigned(Item);
 end;
 
 Procedure TMainWlanClientForm.ProfileSheetShow(Sender: TObject);

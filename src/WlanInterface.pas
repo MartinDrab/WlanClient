@@ -142,7 +142,8 @@ Var
   profile : PWLAN_PROFILE_INFO;
   profileArray : PWLAN_PROFILE_INFO_LIST;
 begin
-If FClient._WlanGetProfileList(@FGuid, profileArray) Then
+Result := FClient._WlanGetProfileList(@FGuid, profileArray);
+If Result Then
   begin
   profile := @profileArray.List;
   For I := 0 To profileArray.NumberOfItems - 1 Do

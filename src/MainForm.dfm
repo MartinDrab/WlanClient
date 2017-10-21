@@ -48,12 +48,10 @@ object MainWlanClientForm: TMainWlanClientForm
     ActivePage = InterfaceInfoSheet
     Align = alClient
     TabOrder = 1
-    ExplicitHeight = 296
     object InterfaceInfoSheet: TTabSheet
       Caption = 'Wireless interface'
       ImageIndex = 3
       OnShow = InterfaceInfoSheetShow
-      ExplicitHeight = 297
       object Label11: TLabel
         Left = 40
         Top = 11
@@ -180,10 +178,23 @@ object MainWlanClientForm: TMainWlanClientForm
         Height = 21
         TabOrder = 7
       end
+      object InterfaceStateEdit: TEdit
+        Left = 96
+        Top = 62
+        Width = 225
+        Height = 21
+        TabOrder = 8
+      end
+      object InterfaceModeEdit: TEdit
+        Left = 96
+        Top = 91
+        Width = 225
+        Height = 21
+        TabOrder = 9
+      end
     end
     object WirelessNetworksTabSheet: TTabSheet
       Caption = 'Wireless networks'
-      ExplicitHeight = 268
       object ListView1: TListView
         Left = 0
         Top = 35
@@ -226,7 +237,6 @@ object MainWlanClientForm: TMainWlanClientForm
         OnAdvancedCustomDrawItem = ListView1AdvancedCustomDrawItem
         OnDeletion = ListView1Deletion
         OnSelectItem = ListView1SelectItem
-        ExplicitHeight = 233
       end
       object Panel2: TPanel
         Left = 0
@@ -261,7 +271,6 @@ object MainWlanClientForm: TMainWlanClientForm
       Caption = 'Network profiles'
       ImageIndex = 1
       OnShow = ProfileSheetShow
-      ExplicitHeight = 268
       object ProfileMenuPanel: TPanel
         Left = 0
         Top = 0
@@ -288,6 +297,16 @@ object MainWlanClientForm: TMainWlanClientForm
           Enabled = False
           TabOrder = 1
           OnClick = ProfileDeleteButtonClick
+        end
+        object CopyXMLButton: TButton
+          Left = 198
+          Top = 2
+          Width = 89
+          Height = 25
+          Caption = 'Copy XML'
+          Enabled = False
+          TabOrder = 2
+          OnClick = CopyXMLButtonClick
         end
       end
       object ProfileListView: TListView
@@ -324,14 +343,12 @@ object MainWlanClientForm: TMainWlanClientForm
         OnAdvancedCustomDrawItem = ProfileListViewAdvancedCustomDrawItem
         OnData = ProfileListViewData
         OnSelectItem = ProfileListViewSelectItem
-        ExplicitHeight = 235
       end
     end
     object HostedNetworkTabSheet: TTabSheet
       Caption = 'Ad-hoc network'
       ImageIndex = 2
       OnShow = HostedNetworkTabSheetShow
-      ExplicitHeight = 268
       object HostedNetworkLowerPanel: TPanel
         Left = 0
         Top = 33
@@ -339,7 +356,6 @@ object MainWlanClientForm: TMainWlanClientForm
         Height = 258
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 235
         object Label2: TLabel
           Left = 8
           Top = 9
@@ -560,20 +576,6 @@ object MainWlanClientForm: TMainWlanClientForm
         end
       end
     end
-  end
-  object InterfaceStateEdit: TEdit
-    Left = 100
-    Top = 129
-    Width = 225
-    Height = 21
-    TabOrder = 2
-  end
-  object InterfaceModeEdit: TEdit
-    Left = 100
-    Top = 156
-    Width = 225
-    Height = 21
-    TabOrder = 3
   end
   object CardListTimer: TTimer
     Enabled = False

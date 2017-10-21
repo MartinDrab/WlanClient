@@ -129,6 +129,7 @@
 			<DCCReference Include="WlanBus.pas"/>
 			<DCCReference Include="WlanProfile.pas"/>
 			<DCCReference Include="WlanHostedNetwork.pas"/>
+			<DCCReference Include="Utils.pas"/>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
